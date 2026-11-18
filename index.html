@@ -153,6 +153,35 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 .th .pv .c i{display:block;height:5px;border-radius:9px}
 .th .pv .nm{font-size:11px;font-weight:600}
 
+/* vision board */
+.vis{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px 12px;padding:0 16px;scrollbar-width:none}
+.vis::-webkit-scrollbar{display:none}
+.vslide{flex:0 0 100%;height:190px;border-radius:var(--r);background:var(--chip) center/cover;position:relative;overflow:hidden;scroll-snap-align:center;cursor:pointer;border:0;padding:0;text-align:left}
+.vis.multi .vslide{flex-basis:88%}
+.vslide::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(0,0,0,.6))}
+.vslide .cap{position:absolute;left:16px;right:16px;bottom:14px;color:#fff;font-size:19px;font-weight:700;letter-spacing:-.5px;line-height:1.3;text-shadow:0 1px 8px rgba(0,0,0,.25)}
+.vslide .gp{position:absolute;right:12px;top:12px;background:rgba(0,0,0,.38);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font-size:12px;font-weight:600;padding:5px 10px;border-radius:99px}
+.vadd{flex:0 0 100%;height:110px;border-radius:var(--r);border:1.5px dashed var(--line);background:none;color:var(--sub);font-size:14px;cursor:pointer;scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.vis.multi .vadd{flex-basis:40%;height:190px}
+.vprev{height:200px;border-radius:16px;background:var(--chip) center/cover;margin-bottom:14px}
+/* memo */
+.memoIn{display:flex;gap:8px;align-items:center;margin-top:10px}
+.memoIn input[type=text]{flex:1;border:1px solid var(--line);border-radius:12px;padding:11px 12px;font-size:15px;background:var(--bg);color:var(--ink);outline:none;font-family:inherit;min-width:0}
+.memoIn input[type=text]:focus{border-color:var(--accent)}
+.mdate{position:relative;flex:none;height:42px;min-width:42px;padding:0 10px;border-radius:12px;background:var(--chip);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink)}
+.mdate input{position:absolute;inset:0;opacity:0;width:100%}
+.mdate.on{background:var(--accent-soft);color:var(--accent-ink);font-weight:600}
+.madd{flex:none;height:42px;width:42px;border-radius:12px;border:0;background:var(--accent);color:var(--onacc);font-size:22px;cursor:pointer}
+.memo{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.memo:last-child{border-bottom:0}
+.memo .ck{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);background:none;flex:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent;padding:0}
+.memo.done .ck{background:var(--accent);border-color:var(--accent);color:var(--onacc)}
+.memo .tx{flex:1;font-size:15px;line-height:1.4;word-break:break-all}
+.memo.done .tx{text-decoration:line-through;color:var(--sub)}
+.memo .dd{font-size:11px;font-weight:600;padding:2px 7px;border-radius:99px;background:var(--chip);color:var(--sub);margin-left:6px;white-space:nowrap;vertical-align:1px}
+.memo .dd.soon{background:var(--accent-soft);color:var(--accent-ink)}
+.memo .dd.late{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}
+.memo .x{border:0;background:none;color:var(--sub);font-size:15px;cursor:pointer;padding:4px 2px;flex:none}
 /* manage */
 .mrow{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
 .mrow:last-child{border-bottom:0}
@@ -172,6 +201,7 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 
   <!-- HOME -->
   <section id="v-home">
+    <div class="vis" id="hVision"></div>
     <div class="card hero">
       <div class="label">이번 달 생활비, 남은 돈</div>
       <div class="big" id="hRemain">0원</div>
@@ -181,6 +211,15 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
     <div class="grid2">
       <div class="card"><div class="label">오늘 써도 되는 돈</div><div class="mid" id="hDaily">–</div><div class="muted" id="hDaysLeft" style="margin-top:4px"></div></div>
       <div class="card"><div class="label">오늘 쓴 돈</div><div class="mid" id="hToday">0원</div><div class="muted" id="hTodayCnt" style="margin-top:4px"></div></div>
+    </div>
+    <div class="card" id="memoCard">
+      <div class="row"><div class="label" style="margin:0">📌 메모</div><span class="muted tap hidden" id="memoClear">완료한 메모 지우기</span></div>
+      <div id="memoList"></div>
+      <div class="memoIn">
+        <input type="text" id="memoText" placeholder="예: 카드 실적 30만원 남음, 관리비 25일" enterkeyhint="done" maxlength="80">
+        <label class="mdate" id="memoDateBtn">📅<input type="date" id="memoDate"></label>
+        <button class="madd" id="memoAdd" aria-label="메모 추가">+</button>
+      </div>
     </div>
     <div class="card">
       <div class="row"><div><div class="mid" id="hStreak"></div><div class="muted" id="hStreakSub" style="margin-top:3px"></div></div><button class="btn soft" id="noSpendBtn" style="padding:10px 14px;font-size:14px">무지출 ✌︎</button></div>
@@ -283,6 +322,21 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
   <button class="btn danger block hidden" id="aDel" style="margin-top:4px">이 기록 삭제</button>
 </div>
 
+<!-- VISION SHEET -->
+<div class="sheet" id="sVision"><div class="grab"></div>
+  <h2>목표 자극 사진</h2>
+  <div class="vprev" id="vPrev"></div>
+  <div class="fl">사진 위에 띄울 문구</div>
+  <input class="f" id="vCap" maxlength="40" placeholder="예: 2030년, 내 이름으로 된 집 🏠">
+  <div class="fl">함께 보여줄 목표 달성률</div>
+  <div class="chips" id="vGoals"></div>
+  <div class="row" style="gap:8px">
+    <label class="btn plain" style="flex:1;text-align:center;position:relative">사진 바꾸기<input type="file" accept="image/*" id="vReplace" style="position:absolute;inset:0;opacity:0;width:100%"></label>
+    <button class="btn" style="flex:1" id="vSave">저장</button>
+  </div>
+  <button class="btn danger block" id="vDel" style="margin-top:4px">이 사진 빼기</button>
+</div>
+
 <!-- DAY SHEET -->
 <div class="sheet" id="sDay"><div class="grab"></div>
   <div class="row" style="margin-bottom:12px"><h2 id="dTitle" style="margin:0"></h2><span class="mid" id="dTotal"></span></div>
@@ -336,6 +390,7 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
   <button class="btn danger block hidden" id="cDel" style="margin-top:4px">삭제</button>
 </div>
 
+<input type="file" accept="image/*" multiple id="vAddFile" class="hidden">
 <div class="toast" id="toast"></div>
 
 <script>
@@ -367,7 +422,7 @@ const SUGCATS={
 };
 function defCats(){const o={};for(const t in DEFCATS)o[t]=DEFCATS[t].map(([n,e])=>({id:uid()+t.slice(0,1),name:n,emoji:e}));return o}
 
-const DEF={v:3,updatedAt:0,settings:{payday:7,income:0,budget:0,name:"",theme:"rose",lastBackup:""},cats:null,tx:[],fixed:[],goals:[],noSpend:[],covers:{},autoKeys:{}};
+const DEF={v:3,updatedAt:0,settings:{payday:7,income:0,budget:0,name:"",theme:"rose",lastBackup:""},cats:null,tx:[],fixed:[],goals:[],noSpend:[],covers:{},autoKeys:{},memos:[],vision:[]};
 const THEME_KEYS=["bg","card","ink","sub","line","chip","accent","accent-soft","accent-ink","save","save-soft","onacc"];
 const THEMES={
  rose:{name:"로즈 밀크티",l:"#f8f5f2 #ffffff #2a2523 #8c817c #ede7e2 #f3eeea #b46c5b #f6e9e4 #8e4e40 #5f8572 #e6efe9 #fff",d:"#171413 #221e1c #f3eeea #a39893 #332d2a #2b2624 #e0a291 #3a2924 #f0c2b5 #9cc0ac #22302a #2a1a15"},
@@ -403,7 +458,7 @@ const idbKeys=st=>tx_(st,"readonly",s=>s.getAllKeys());
 function normalize(d){
   const o=Object.assign(JSON.parse(JSON.stringify(DEF)),d||{});
   o.settings=Object.assign({},DEF.settings,o.settings||{});
-  ["tx","fixed","goals","noSpend"].forEach(k=>{if(!Array.isArray(o[k]))o[k]=[]});
+  ["tx","fixed","goals","noSpend","memos","vision"].forEach(k=>{if(!Array.isArray(o[k]))o[k]=[]});
   if(!o.covers||typeof o.covers!=="object")o.covers={};
   if(!o.autoKeys||typeof o.autoKeys!=="object")o.autoKeys={};
   o.fixed.forEach(f=>{if(!f.kind)f.kind="고정"});
@@ -574,6 +629,7 @@ function render(){
     .map(([e,n,v,c,s])=>`<div class="item"><div class="emo">${e}</div><div class="t"><b>${n}</b>${s?`<small>${s}</small>`:""}</div><div class="amt ${c}">${won(v)}</div></div>`).join("")+
     `<div class="item"><div class="emo">🌷</div><div class="t"><b>지금 남는 돈</b>${S.settings.income?"":"<small>관리에서 실수령액을 넣으면 정확해져요</small>"}</div><div class="amt ${left<0?"neg":""}" style="font-size:17px">${won(left)}</div></div>`;
 
+  renderVision();renderMemos(today);
   renderCal(today,tstr);
 
   /* goals */
@@ -723,6 +779,55 @@ armDelete($("#aDel"),"이 기록 삭제",()=>{A.photos.concat(A.origPhotos).forE
 document.addEventListener("click",e=>{const it=e.target.closest("[data-tx]");if(it){const t=S.tx.find(x=>x.id===it.dataset.tx);if(t)openAdd(t)}});
 $("#noSpendBtn").onclick=()=>{const t=ymd(new Date());if(S.noSpend.includes(t))S.noSpend=S.noSpend.filter(d=>d!==t);else{S.noSpend.push(t);toast("무지출 데이 ✌︎ 잘했어요!")}persist()};
 
+/* vision board: 목표 자극 사진 */
+const MAXV=6;
+function renderVision(){
+  const v=S.vision,el=$("#hVision");
+  el.classList.toggle("multi",v.length>0);
+  el.innerHTML=v.map((x,i)=>{const g=S.goals.find(g=>g.id===x.goalId);const pc=g&&g.target?Math.floor(Math.min(100,goalSaved(g)/g.target*100)):null;
+    const src=photoSrc(x);return `<button class="vslide" data-vi="${i}" ${src?`style="background-image:url('${src}')"`:""}>${pc!==null?`<span class="gp">${esc(g.name)} ${pc}%</span>`:""}${x.cap?`<span class="cap">${esc(x.cap)}</span>`:""}</button>`}).join("")+
+    (v.length<MAXV?`<button class="vadd" id="vAddBtn"><span style="font-size:22px">🖼️</span>${v.length?"사진 추가":"목표 자극 사진 넣기<br><small>꿈꾸는 집, 가고 싶은 여행지…</small>"}</button>`:"");
+}
+let VE=null;
+function openVision(i){
+  VE=i;const x=S.vision[i];
+  $("#vPrev").style.backgroundImage=`url('${photoSrc(x)}')`;$("#vCap").value=x.cap||"";
+  VE_goal=x.goalId||null;drawVGoals();open("#sVision");
+}
+let VE_goal=null;
+function drawVGoals(){$("#vGoals").innerHTML=`<button class="chip ${!VE_goal?"on":""}" data-g="">안 보이기</button>`+S.goals.map(g=>`<button class="chip ${VE_goal===g.id?"on":""}" data-g="${g.id}">${esc(g.name)}</button>`).join("")}
+$("#vGoals").onclick=e=>{const b=e.target.closest("[data-g]");if(b){VE_goal=b.dataset.g||null;drawVGoals()}};
+$("#hVision").onclick=e=>{if(e.target.closest("#vAddBtn")){$("#vAddFile").click();return}const s=e.target.closest("[data-vi]");if(s)openVision(+s.dataset.vi)};
+$("#vAddFile").onchange=async e=>{
+  const files=[...(e.target.files||[])].slice(0,MAXV-S.vision.length);e.target.value="";if(!files.length)return;
+  toast("사진 넣는 중…");let first=S.vision.length;
+  for(const f of files){try{const p=await storePhoto(f);S.vision.push({k:p.k,data:p.data,cap:"",goalId:S.goals[0]?S.goals[0].id:null})}catch(err){}}
+  persist();if(S.vision.length>first)openVision(first);
+};
+$("#vReplace").onchange=async e=>{const f=e.target.files&&e.target.files[0];e.target.value="";if(!f||VE===null)return;
+  try{const p=await storePhoto(f);dropPhoto(S.vision[VE]);S.vision[VE].k=p.k;S.vision[VE].data=p.data;$("#vPrev").style.backgroundImage=`url('${photoSrc(S.vision[VE])}')`;persist()}catch(err){toast("사진을 불러오지 못했어요")}};
+$("#vSave").onclick=()=>{if(VE===null)return;S.vision[VE].cap=$("#vCap").value.trim();S.vision[VE].goalId=VE_goal;persist();close();toast("저장했어요")};
+armDelete($("#vDel"),"이 사진 빼기",()=>{if(VE===null)return;dropPhoto(S.vision[VE]);S.vision.splice(VE,1);VE=null;persist();close();toast("뺐어요")});
+
+/* memo: 홈 메모장 */
+function dday(ds,today){const n=Math.round((parse(ds)-new Date(today.getFullYear(),today.getMonth(),today.getDate()))/864e5);return n===0?["오늘","soon"]:n>0?[`D-${n}`,n<=3?"soon":""]:[`${-n}일 지남`,"late"]}
+function renderMemos(today){
+  const list=[...S.memos].sort((a,b)=>(a.done-b.done)||((a.date?0:1)-(b.date?0:1))||(a.date||"").localeCompare(b.date||"")||(a.at-b.at));
+  $("#memoList").innerHTML=list.map(m=>{const d=m.date&&!m.done?dday(m.date,today):null;const md=m.date?`${+m.date.slice(5,7)}/${+m.date.slice(8)}`:"";
+    return `<div class="memo ${m.done?"done":""}" data-m="${m.id}"><button class="ck" data-ck="1" aria-label="완료">✓</button><div class="tx">${esc(m.text)}${m.date?`<span class="dd ${d?d[1]:""}">${md}${d?" · "+d[0]:""}</span>`:""}</div><button class="x" data-x="1" aria-label="지우기">✕</button></div>`}).join("");
+  $("#memoClear").classList.toggle("hidden",!S.memos.some(m=>m.done));
+  const md=$("#memoDate").value;$("#memoDateBtn").classList.toggle("on",!!md);
+  $("#memoDateBtn").firstChild.textContent=md?`${+md.slice(5,7)}/${+md.slice(8)}`:"📅";
+}
+function addMemo(){const t=$("#memoText").value.trim();if(!t)return;S.memos.push({id:uid(),text:t,date:$("#memoDate").value||"",done:false,at:Date.now()});$("#memoText").value="";$("#memoDate").value="";persist()}
+$("#memoAdd").onclick=addMemo;
+$("#memoText").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();addMemo()}});
+$("#memoDate").addEventListener("change",()=>render());
+$("#memoList").onclick=e=>{const row=e.target.closest("[data-m]");if(!row)return;const m=S.memos.find(x=>x.id===row.dataset.m);if(!m)return;
+  if(e.target.closest("[data-ck]")){m.done=!m.done;persist()}
+  else if(e.target.closest("[data-x]")){S.memos=S.memos.filter(x=>x!==m);persist()}};
+$("#memoClear").onclick=()=>{S.memos=S.memos.filter(m=>!m.done);persist();toast("완료한 메모를 지웠어요")};
+
 /* day detail */
 let curDay=null;
 $("#calGrid").onclick=e=>{const b=e.target.closest("[data-day]");if(b)openDay(b.dataset.day)};
@@ -846,7 +951,7 @@ $("#bkFile").onclick=async()=>{
   const btn=$("#bkFile");btn.disabled=true;btn.textContent="백업 파일 만드는 중…";
   try{
     const photos={};
-    for(const t of S.tx)for(const p of (t.photos||[])){if(p.data)continue;if(idb){const b=await idbGet("photos",p.k);if(b)photos[p.k]=await b2d(b)}}
+    for(const p of S.tx.flatMap(t=>t.photos||[]).concat(S.vision)){if(p.data)continue;if(idb){const b=await idbGet("photos",p.k);if(b)photos[p.k]=await b2d(b)}}
     const json=JSON.stringify({app:"gagyebu",ver:3,savedAt:new Date().toISOString(),state:S,photos});
     const name=`가계부백업_${ymd(new Date())}.json`;
     const file=new File([json],name,{type:"application/json"});
@@ -886,6 +991,9 @@ $("#bkDo").onclick=async()=>{
         else lost++}
       t.photos=keep;delete t.photo;
     }
+    const vk=[];for(const v0 of (state.vision||[])){const v=Object.assign({},v0);const data=photos[v.k]||v.data;
+      if(data){if(idb){await idbPut("photos",v.k,await d2b(data));delete v.data}else v.data=data;vk.push(v)}else lost++}
+    state.vision=vk;
     S=normalize(state);await saveNow();render();
     pendingImport=null;$("#bkConfirm").classList.add("hidden");
     toast(lost?`불러왔어요 (사진 ${lost}장은 옮기지 못했어요)`:"백업을 불러왔어요 ✓");
