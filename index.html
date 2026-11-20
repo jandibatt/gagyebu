@@ -154,7 +154,10 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 .dph span{position:absolute;left:10px;top:10px;background:var(--accent);color:var(--onacc);font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px}
 .emo{position:relative}
 .emo .pc{position:absolute;right:-4px;bottom:-4px;font-style:normal;font-size:10px;font-weight:700;background:var(--ink);color:var(--bg);border-radius:99px;padding:1px 5px}
-.themes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.themes{display:flex;flex-wrap:wrap;gap:7px}
+.thc{border:1.5px solid transparent;border-radius:99px;padding:7px 12px;font-size:13.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
+.thc i{width:9px;height:9px;border-radius:50%;display:block}
+.thc.on{border-color:currentColor}
 .th{border:2px solid transparent;border-radius:16px;background:none;cursor:pointer;padding:3px;text-align:left}
 .th.on{border-color:var(--ink)}
 .th .pv{border-radius:12px;padding:8px;height:74px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
@@ -222,6 +225,7 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
       <div class="card"><div class="label">오늘 쓴 돈</div><div class="mid" id="hToday">0원</div><div class="muted" id="hTodayCnt" style="margin-top:4px"></div></div>
     </div>
     <div class="card tap hidden" id="billCard"></div>
+    <div class="card hidden" id="perfCard"></div>
     <div class="card hidden" id="instCard"></div>
     <div class="card" id="memoCard">
       <div class="row"><div class="label" style="margin:0">📌 메모</div><span class="muted tap hidden" id="memoClear">완료한 메모 지우기</span></div>
@@ -282,7 +286,7 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
     <div class="muted" id="mHint" style="margin:-4px 8px 0;line-height:1.5"></div>
 
     <div class="sec">화면 색감</div>
-    <div class="card"><div class="themes" id="mThemes"></div><div class="muted" style="margin-top:12px">아이폰을 다크모드로 쓰면 같은 색감의 어두운 버전으로 바뀌어요.</div></div>
+    <div class="card" style="padding:14px 16px"><div class="themes" id="mThemes"></div></div>
 
     <div class="sec">카테고리</div>
     <div class="card">
@@ -295,7 +299,11 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
     <div class="card"><div class="list" id="fList"></div><button class="btn soft block" id="addFixed" style="margin-top:10px">+ 고정지출·구독·자동저축 추가</button></div>
 
     <div class="sec">💳 신용카드</div>
-    <div class="card"><div class="list" id="cardList"></div><button class="btn soft block" id="addCard" style="margin-top:10px">+ 카드 등록</button></div>
+    <div class="card">
+      <div class="fl" style="margin-top:0">할부는 예산에 어떻게 넣을까요?</div>
+      <div class="seg" id="mInstMode" style="margin-bottom:6px"><button data-m="A">산 날 전액</button><button data-m="B">매달 할부금만</button></div>
+      <div class="muted" id="mInstHint" style="margin:0 2px 12px;line-height:1.5"></div>
+      <div class="list" id="cardList"></div><button class="btn soft block" id="addCard" style="margin-top:10px">+ 카드 등록</button></div>
 
     <div class="sec">데이터</div>
     <div class="card">
@@ -330,6 +338,7 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
     <div class="fl">결제수단</div><div class="chips" id="aPay"></div>
     <div id="aInstWrap" class="hidden">
       <div class="fl">할부</div><div class="chips" id="aInst"></div>
+      <div id="aRateWrap"></div>
       <div class="instInfo" id="aInstInfo"></div>
     </div>
   </div>
@@ -353,6 +362,7 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
     <div style="flex:1"><div class="fl">결제일</div><input class="f" id="cdPay" inputmode="numeric" placeholder="예: 14"></div>
     <div style="flex:1"><div class="fl">이용기간 마지막 날</div><input class="f" id="cdCut" inputmode="numeric" placeholder="말일이면 비워둬요"></div>
   </div>
+  <div class="fl">전월 실적 조건 (선택)</div><input class="f" id="cdMin" inputmode="numeric" placeholder="예: 300,000 · 없으면 비워둬요">
   <div class="instInfo" id="cdInfo" style="margin-top:0"></div>
   <button class="btn block" id="cdSave">저장</button>
   <button class="btn danger block hidden" id="cdDel" style="margin-top:4px">삭제</button>
@@ -613,7 +623,7 @@ function txRow(t,showDate){
   const c=catOf(t),g=S.goals.find(x=>x.id===t.goalId),ph=photoSrc((t.photos||[])[0]),pc=(t.photos||[]).length;
   const d=parse(t.date);
   const cd=t.pay&&S.cards.find(x=>x.id===t.pay.card);
-  const sub=[showDate?`${d.getMonth()+1}/${d.getDate()}`:"",t.auto?"🔁 자동이체":c.name,g?"→ "+g.name:"",cd?`💳 ${cd.name}${t.pay.n>1?` ${t.pay.n}개월`:""}`:""].filter(Boolean).join(" · ");
+  const sub=[showDate?`${d.getMonth()+1}/${d.getDate()}`:"",t.auto?"🔁 자동이체":c.name,g?"→ "+g.name:"",cd?`💳 ${cd.name}${t.pay.n>1?` ${t.pay.n}개월${t.pay.rate?" 유이자":""}`:""}`:""].filter(Boolean).join(" · ");
   return `<div class="item tap" data-tx="${t.id}"><div class="emo" ${ph?`style="background-image:url('${ph}')"`:""}>${ph?(pc>1?`<i class="pc">${pc}</i>`:""):c.emoji}</div><div class="t"><b>${esc(t.memo||c.name)}</b><small>${esc(sub)}</small></div><div class="amt ${t.type==="in"?"in":t.type==="save"?"save":""}">${t.type==="out"?"-":t.type==="in"?"+":""}${won(t.amount)}</div></div>`;
 }
 
@@ -628,7 +638,8 @@ function render(){
   $("#hdrTitle").textContent=S.settings.name||"나의 가계부";
   $("#hdrSub").textContent=`${today.getMonth()+1}월 ${today.getDate()}일 ${WD[today.getDay()]}요일 · 월급 기간 ${fmtP(p)}`;
   const txs=S.tx.filter(t=>inP(t,p));
-  const spent=txs.filter(t=>t.type==="out").reduce((a,t)=>a+t.amount,0);
+  const SE=spendEntries();
+  const spent=SE.filter(x=>x.date>=p.s&&x.date<=p.e).reduce((a,x)=>a+x.amt,0);
   const saved=txs.filter(t=>t.type==="save").reduce((a,t)=>a+t.amount,0);
   const incomeRec=txs.filter(t=>t.type==="in").reduce((a,t)=>a+t.amount,0);
   const rs=S.fixed.map(f=>({f,...ruleState(f,p,today)}));
@@ -636,7 +647,7 @@ function render(){
   const planned=rs.filter(r=>isSaveRule(r.f)&&r.st==="todo").reduce((a,r)=>a+r.f.amount,0);
   const budget=S.settings.budget, remain=budget-spent;
   const daysLeft=Math.round((p.end-new Date(today.getFullYear(),today.getMonth(),today.getDate()))/864e5)+1;
-  const todaySpent=S.tx.filter(t=>t.date===tstr&&t.type==="out").reduce((a,t)=>a+t.amount,0);
+  const todaySpent=SE.filter(x=>x.date===tstr).reduce((a,x)=>a+x.amt,0);
   const daily=Math.max(0,Math.floor((remain+todaySpent)/daysLeft));
 
   /* home */
@@ -701,13 +712,13 @@ function renderCal(today,tstr){
   $("#calTitle").textContent=`${calY}년 ${calM+1}월`;
   const first=new Date(calY,calM,1),days=dim(calY,calM),pref=`${calY}-${pad(calM+1)}-`;
   const mtx=S.tx.filter(t=>t.date.startsWith(pref));
-  const mOut=mtx.filter(t=>t.type==="out");
-  $("#calSum").textContent=`지출 ${won(mOut.reduce((a,t)=>a+t.amount,0))}`;
+  const mOut=spendEntries().filter(x=>x.date.startsWith(pref));
+  $("#calSum").textContent=`지출 ${won(mOut.reduce((a,x)=>a+x.amt,0))}`;
   const pd=Math.min(S.settings.payday,days);
   const allI=allInst();
   let h="";for(let i=0;i<first.getDay();i++)h+=`<div class="day blank"></div>`;
   for(let d=1;d<=days;d++){
-    const ds=pref+pad(d),list=mtx.filter(t=>t.date===ds),out=list.filter(t=>t.type==="out").reduce((a,t)=>a+t.amount,0);
+    const ds=pref+pad(d),list=mtx.filter(t=>t.date===ds),out=mOut.filter(x=>x.date===ds).reduce((a,x)=>a+x.amt,0);
     const ph=coverOf(ds);
     const cls=["day",ph?"ph":"",ds===tstr?"today":"",d===pd?"pay":"",new Date(calY,calM,d).getDay()===0?"sun":"",ds>tstr?"future":"",S.noSpend.includes(ds)&&!out?"ns":""].join(" ");
     const bill=allI.filter(x=>x.date===ds).reduce((a,x)=>a+x.amt,0);
@@ -718,8 +729,8 @@ function renderCal(today,tstr){
   const isNow=calY===today.getFullYear()&&calM===today.getMonth();
   $("#calNext").style.visibility="visible";
   // categories
-  const tot=mOut.reduce((a,t)=>a+t.amount,0),cats={};
-  mOut.forEach(t=>{const c=catOf(t),k=c.emoji+" "+c.name;cats[k]=(cats[k]||0)+t.amount});
+  const tot=mOut.reduce((a,x)=>a+x.amt,0),cats={};
+  mOut.forEach(x=>{const c=catOf(x.t),k=c.emoji+" "+c.name;cats[k]=(cats[k]||0)+x.amt});
   const ce=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
   $("#catCard").classList.toggle("hidden",!ce.length);
   $("#catList").innerHTML=ce.map(([c,v])=>`<div style="margin:12px 0"><div class="row"><span>${esc(c)}</span><span class="amt">${won(v)} <span class="muted">${Math.round(v/tot*100)}%</span></span></div><div class="bar" style="margin:6px 0 0;height:6px"><i style="width:${v/ce[0][1]*100}%"></i></div></div>`).join("");
@@ -738,7 +749,7 @@ function renderManage(p,fixedSum,today,rs,planned){
   const autoSave=rs.filter(r=>isSaveRule(r.f)&&(r.st==="done"||r.st==="todo")).reduce((a,r)=>a+r.f.amount,0);
   $("#mHint").textContent=inc?`실수령 ${won(inc)} − 고정지출 ${won(fixedSum)}${autoSave?` − 자동저축 ${won(autoSave)}`:""} = ${won(inc-fixedSum-autoSave)}. 이 안에서 생활비 예산을 잡아보세요.`:"월급날을 기준으로 한 달을 계산해요.";
   const dk=window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches;
-  $("#mThemes").innerHTML=Object.entries(THEMES).map(([k,t])=>{const o=pal(t,dk?"d":"l");return `<button class="th ${S.settings.theme===k?"on":""}" data-theme="${k}"><div class="pv" style="background:${o.bg}"><div class="c" style="background:${o.card}"><i style="background:${o.accent};width:70%"></i><i style="background:${o.save};width:45%"></i></div><span class="nm" style="color:${o.ink}">${t.name}</span></div></button>`}).join("");
+  $("#mThemes").innerHTML=Object.entries(THEMES).map(([k,t])=>{const o=pal(t,dk?"d":"l");return `<button class="thc ${S.settings.theme===k?"on":""}" data-theme="${k}" style="color:${o.accent};background:${o["accent-soft"]}"><i style="background:${o.accent}"></i>${t.name}</button>`}).join("");
   $$("#mCatSeg button").forEach(b=>b.classList.toggle("on",b.dataset.t===mType));
   $("#mCats").innerHTML=S.cats[mType].map(c=>`<button class="chip" data-cat="${c.id}">${esc(c.emoji)} ${esc(c.name)}</button>`).join("")+`<button class="chip dash" data-cat="">+ 추가</button>`;
   $("#mFixedSum").textContent=(fixedSum||autoSave)?"· 이번 달 "+won(fixedSum+autoSave):"";
@@ -765,7 +776,7 @@ function close(){if(!openSheet)return;openSheet.classList.remove("open");$("#bg"
 $("#bg").onclick=close;
 function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),1700)}
 function moneyInput(el){el.addEventListener("input",()=>{const n=num(el.value);el.value=n?n.toLocaleString("ko-KR"):""})}
-["#aAmt","#fxAmt","#gTarget","#gStart","#mIncome","#mBudget"].forEach(s=>moneyInput($(s)));
+["#aAmt","#fxAmt","#gTarget","#gStart","#mIncome","#mBudget","#cdMin"].forEach(s=>moneyInput($(s)));
 function armDelete(btn,label,fn){btn.onclick=()=>{if(!btn._arm){btn._arm=true;btn.textContent="한 번 더 누르면 삭제돼요";clearTimeout(btn._t);btn._t=setTimeout(()=>{btn._arm=false;btn.textContent=label},3000);return}btn._arm=false;btn.textContent=label;fn()}}
 
 /* add / edit tx */
@@ -784,9 +795,9 @@ function drawAdd(){
       $("#aInst").innerHTML=opts.map(n=>`<button class="chip ${A.n===n?"on":""}" data-n="${n}">${n===1?"일시불":n+"개월"}</button>`).join("")+`<label class="chip ${custom?"on":""}" style="display:inline-flex;align-items:center;gap:2px">${custom?A.n+"개월":"직접"}<input type="number" inputmode="numeric" min="2" max="36" id="aInstN" style="position:absolute;inset:0;opacity:0;width:100%"></label>`;
       $("#aInstN").onchange=e=>{const v=Math.min(36,Math.max(2,num(e.target.value)));if(v){A.n=v;drawAdd()}};
       const card=S.cards.find(c=>c.id===A.pay),amt=num($("#aAmt").value);
-      const tmp={type:"out",date:A.date,amount:amt||0,pay:{card:A.pay,n:A.n}},it=instOf(tmp);
-      const f=it[0]?parse(it[0].date):null,l=it.length?parse(it[it.length-1].date):null;
-      $("#aInstInfo").innerHTML=!it.length?"":A.n===1?`💳 ${f.getMonth()+1}/${f.getDate()} 카드값에 ${amt?won(amt):"전액"} 포함`:`💳 매달 ${amt?won(it[1].amt):"…"} × ${A.n}회<br>첫 결제 ${f.getMonth()+1}/${f.getDate()} · 마지막 ${l.getFullYear()!==f.getFullYear()?String(l.getFullYear()).slice(2)+"년 ":""}${l.getMonth()+1}/${l.getDate()}<br><span style="font-weight:500;opacity:.8">예산엔 오늘 전액이 들어가요</span>`;
+      $("#aRateWrap").innerHTML=A.n>1?`<div class="chips" style="margin-top:-4px"><button class="chip ${!A.rateOn?"on":""}" data-rate="0">무이자</button><button class="chip ${A.rateOn?"on":""}" data-rate="1">이자 있음</button></div>${A.rateOn?`<div class="row" style="gap:8px;margin:-6px 0 12px;justify-content:flex-start"><span class="muted">연 이율</span><input class="f" id="aRate" inputmode="decimal" style="margin:0;width:110px;padding:9px 12px" value="${A.rate||""}" placeholder="예: 15.9"><span class="muted">%</span></div>`:""}`:"";
+      if($("#aRate"))$("#aRate").oninput=e=>{A.rate=Math.min(30,Math.max(0,parseFloat(e.target.value)||0));drawInstInfo()};
+      drawInstInfo();
     }
   }
   $("#aGoals").innerHTML=`<button class="chip ${!A.goalId?"on":""}" data-g="">목표 없음</button>`+S.goals.map(g=>`<button class="chip ${A.goalId===g.id?"on":""}" data-g="${g.id}">${esc(g.name)}</button>`).join("");
@@ -801,11 +812,21 @@ function drawAdd(){
   $("#aSave").textContent=A.editId?"수정하기":"기록하기";
   $("#aDel").classList.toggle("hidden",!A.editId);
 }
+function drawInstInfo(){
+  if(!A.pay||A.type!=="out"){$("#aInstInfo").innerHTML="";return}
+  const amt=num($("#aAmt").value);
+  const it=instOf({type:"out",date:A.date,amount:amt||0,pay:{card:A.pay,n:A.n,rate:A.n>1&&A.rateOn?A.rate:0}});
+  if(!it.length){$("#aInstInfo").innerHTML="";return}
+  const fee=it.reduce((a,x)=>a+x.fee,0),B=instMode()==="B",f=parse(it[0].date),l=parse(it[it.length-1].date);
+  $("#aInstInfo").innerHTML=A.n===1?`💳 ${f.getMonth()+1}/${f.getDate()} 카드값에 ${amt?won(amt):"전액"} 포함`:
+    `💳 매달 ${amt?(fee?"약 ":"")+won(it[1].amt):"…"} × ${A.n}회${fee?` <span style="font-weight:500">(원금 ${won(it[1].prin)} + 수수료)</span><br>총 수수료 ${won(fee)}`:""}<br>첫 결제 ${f.getMonth()+1}/${f.getDate()} · 마지막 ${l.getFullYear()!==f.getFullYear()?String(l.getFullYear()).slice(2)+"년 ":""}${l.getMonth()+1}/${l.getDate()}<br><span style="font-weight:500;opacity:.8">${B?`예산엔 매달 할부금만 들어가요 (이번 달 ${amt?won(it[0].amt):"…"})`:`예산엔 오늘 ${fee?"전액과 수수료가":"전액이"} 들어가요`}</span>`;
+}
 $("#typeSeg").onclick=e=>{const b=e.target.closest("button");if(!b)return;A.type=b.dataset.t;A.c=S.cats[A.type][0].id;drawAdd()};
 $("#aCats").onclick=e=>{const b=e.target.closest("[data-c]");if(b){A.c=b.dataset.c;drawAdd();return}if(e.target.closest("[data-newcat]")){A.keep=true;openCat(A.type,null,true)}};
 $("#aPay").onclick=e=>{if(e.target.closest("[data-newcard]")){openCardSheet(null,true);return}const b=e.target.closest("[data-pay]");if(b){A.pay=b.dataset.pay;if(!A.pay)A.n=1;drawAdd()}};
 $("#aInst").onclick=e=>{const b=e.target.closest("[data-n]");if(b){A.n=+b.dataset.n;drawAdd()}};
-$("#aAmt").addEventListener("input",()=>{if(A.pay)drawAdd()});
+$("#aRateWrap").onclick=e=>{const b=e.target.closest("[data-rate]");if(!b)return;A.rateOn=b.dataset.rate==="1";if(A.rateOn&&!A.rate)A.rate=S.settings.lastRate||0;if(!A.rateOn)A.rate=0;drawAdd();if(A.rateOn)setTimeout(()=>{const r=$("#aRate");if(r&&!r.value)r.focus()},50)};
+$("#aAmt").addEventListener("input",()=>{if(A.pay)drawInstInfo()});
 $("#aGoals").onclick=e=>{const b=e.target.closest("[data-g]");if(b){A.goalId=b.dataset.g||null;drawAdd()}};
 $("#aDate").onclick=e=>{const b=e.target.closest("[data-d]");if(b){A.date=b.dataset.d;drawAdd()}};
 const MAXPH=6;
@@ -818,8 +839,8 @@ $("#aPhoto").onchange=async e=>{
 };
 $("#aThumbs").onclick=e=>{const b=e.target.closest("[data-rm]");if(!b)return;e.preventDefault();const p=A.photos.find(x=>x.k===b.dataset.rm);if(p&&!isOrig(p))dropPhoto(p);A.photos=A.photos.filter(x=>x.k!==b.dataset.rm);drawAdd()};
 function openAdd(tx,date){
-  if(tx){A={type:tx.type,c:tx.c||S.cats[tx.type][0].id,goalId:tx.goalId||null,date:tx.date,editId:tx.id,photos:[...(tx.photos||[])],origPhotos:[...(tx.photos||[])],pay:tx.pay?tx.pay.card:"",n:tx.pay?tx.pay.n||1:1};$("#aAmt").value=tx.amount.toLocaleString("ko-KR");$("#aMemo").value=tx.memo||""}
-  else{A={type:"out",c:S.cats.out[0].id,goalId:null,date:date||ymd(new Date()),editId:null,photos:[],origPhotos:[],pay:S.cards.some(c=>c.id===S.settings.lastPay)?S.settings.lastPay:"",n:1};$("#aAmt").value="";$("#aMemo").value=""}
+  if(tx){A={type:tx.type,c:tx.c||S.cats[tx.type][0].id,goalId:tx.goalId||null,date:tx.date,editId:tx.id,photos:[...(tx.photos||[])],origPhotos:[...(tx.photos||[])],pay:tx.pay?tx.pay.card:"",n:tx.pay?tx.pay.n||1:1,rate:tx.pay&&tx.pay.rate||0,rateOn:!!(tx.pay&&tx.pay.rate)};$("#aAmt").value=tx.amount.toLocaleString("ko-KR");$("#aMemo").value=tx.memo||""}
+  else{A={type:"out",c:S.cats.out[0].id,goalId:null,date:date||ymd(new Date()),editId:null,photos:[],origPhotos:[],pay:S.cards.some(c=>c.id===S.settings.lastPay)?S.settings.lastPay:"",n:1,rate:0,rateOn:false};$("#aAmt").value="";$("#aMemo").value=""}
   drawAdd();open("#sAdd");if(!tx)setTimeout(()=>$("#aAmt").focus(),260);
 }
 $("#openAdd").onclick=()=>openAdd();
@@ -828,7 +849,7 @@ $("#aSave").onclick=()=>{
   const c=S.cats[A.type].find(x=>x.id===A.c)||S.cats[A.type][0];
   const prev=A.editId&&S.tx.find(t=>t.id===A.editId);
   const rec={id:A.editId||uid(),at:prev?prev.at||0:Date.now(),date:A.date,type:A.type,amount,c:c.id,cat:c.name,memo:$("#aMemo").value.trim(),goalId:A.type==="save"?A.goalId:null,photos:A.photos};
-  if(A.type==="out"&&A.pay&&S.cards.some(c=>c.id===A.pay))rec.pay={card:A.pay,n:A.n||1};
+  if(A.type==="out"&&A.pay&&S.cards.some(c=>c.id===A.pay)){rec.pay={card:A.pay,n:A.n||1};if(A.n>1&&A.rateOn&&A.rate>0){rec.pay.rate=A.rate;S.settings.lastRate=A.rate}}
   if(A.type==="out")S.settings.lastPay=A.pay||"";
   A.origPhotos.forEach(o=>{if(!A.photos.some(p=>p.k===o.k))dropPhoto(o)});
   S.tx=A.editId?S.tx.map(t=>t.id===A.editId?rec:t):[...S.tx,rec];
@@ -854,10 +875,23 @@ function payDateOf(card,date){ // 마감일 다음에 오는 첫 결제일
   if(p<=c){const n=new Date(c.getFullYear(),c.getMonth()+1,1);p=clampDay(n.getFullYear(),n.getMonth(),card.pay)}
   return p;
 }
-function instOf(t){ // 한 기록의 회차별 결제 [{date, amt, i, n}]
+function instOf(t){ // 한 기록의 회차별 결제 [{date, amt, prin, fee, i, n}] · 유이자면 잔여원금×연이율/12
   const card=t.pay&&S.cards.find(c=>c.id===t.pay.card);if(!card||t.type!=="out")return [];
-  const n=Math.max(1,t.pay.n||1),first=payDateOf(card,t.date),base=Math.floor(t.amount/n),rest=t.amount-base*n;
-  const out=[];for(let i=0;i<n;i++){const d=clampDay(first.getFullYear(),first.getMonth()+i,card.pay);out.push({date:ymd(d),amt:base+(i===0?rest:0),i:i+1,n,t,card})}
+  const n=Math.max(1,t.pay.n||1),rate=n>1?(+t.pay.rate||0):0,first=payDateOf(card,t.date),base=Math.floor(t.amount/n),rest=t.amount-base*n;
+  const out=[];let left=t.amount;
+  for(let i=0;i<n;i++){const d=clampDay(first.getFullYear(),first.getMonth()+i,card.pay),prin=base+(i===0?rest:0),fee=Math.round(left*rate/100/12);left-=prin;
+    out.push({date:ymd(d),amt:prin+fee,prin,fee,i:i+1,n,t,card})}
+  return out;
+}
+const feeOf=t=>instOf(t).reduce((a,x)=>a+x.fee,0);
+const costOf=t=>t.amount+(t.pay&&t.pay.rate?feeOf(t):0);
+const instMode=()=>S.settings.instMode==="B"?"B":"A";
+/* 예산에 들어가는 지출 항목: A=산 날 전액(+수수료), B=할부는 산 날부터 매달 같은 날짜에 회차금만 */
+function spendEntries(){
+  const B=instMode()==="B",out=[];
+  S.tx.forEach(t=>{if(t.type!=="out")return;
+    if(B&&t.pay&&t.pay.n>1){const it=instOf(t);if(it.length){const d0=parse(t.date);it.forEach((x,k)=>out.push({date:ymd(clampDay(d0.getFullYear(),d0.getMonth()+k,d0.getDate())),amt:x.amt,t,i:x.i,n:x.n}));return}}
+    out.push({date:t.date,amt:costOf(t),t,i:0,n:1})});
   return out;
 }
 function allInst(){return S.tx.flatMap(instOf)}
@@ -891,9 +925,25 @@ function renderCards(today){
         return `<div class="item tap" data-tx="${r.t.id}"><div class="emo">${c.emoji}</div><div class="t"><b>${esc(r.t.memo||c.name)}<span class="ctag">${r.paid}/${n}회</span></b><div class="bar" style="margin:6px 0 4px;height:6px"><i style="width:${r.paid/n*100}%"></i></div><small>매달 ${won(r.it[1]?r.it[1].amt:r.it[0].amt)} · 남은 ${won(rem)}</small></div></div>`}).join("")+
       (running.length>4?`<div class="muted" style="text-align:center;padding-top:8px">외 ${running.length-4}건</div>`:"")+`</div>`;
   }
+  // 카드 실적 (매월 1일~말일 이용금액, 할부는 산 달에 전액)
+  const perfOf=(c,y,m)=>{const pre=`${y}-${pad(m+1)}-`;return S.tx.filter(t=>t.type==="out"&&t.pay&&t.pay.card===c.id&&t.date.startsWith(pre)).reduce((a,t)=>a+t.amount,0)};
+  const pm=new Date(today.getFullYear(),today.getMonth()-1,1);
+  const pcs=S.cards.filter(c=>c.min>0);
+  $("#perfCard").classList.toggle("hidden",!pcs.length);
+  if(pcs.length){
+    const dl=dim(today.getFullYear(),today.getMonth())-today.getDate();
+    $("#perfCard").innerHTML=`<div class="row"><div class="label" style="margin:0">🎯 이번 달 카드 실적</div><span class="muted">${today.getMonth()+1}월 · ${dl?`${dl}일 남음`:"오늘 마감"}</span></div>`+pcs.map(c=>{
+      const v=perfOf(c,today.getFullYear(),today.getMonth()),ok=v>=c.min,pv=perfOf(c,pm.getFullYear(),pm.getMonth()),pok=pv>=c.min;
+      return `<div style="margin-top:12px"><div class="row"><b style="font-size:15px">${esc(c.name)}${ok?`<span class="tag done">✓ 달성</span>`:""}</b><span class="muted">지난달 ${pok?"✓":"✗"}</span></div>
+        <div class="bar ${ok?"save":""}" style="margin:8px 0 5px"><i style="width:${Math.min(100,v/c.min*100)}%"></i></div>
+        <div class="row muted" style="font-size:12.5px"><span>${won(v)} / ${won(c.min)}</span><span style="${ok?"":"color:var(--accent-ink);font-weight:700"}">${ok?"혜택 조건 충족!":`${won(c.min-v)} 더 쓰면 달성`}</span></div></div>`}).join("");
+  }
+  $$("#mInstMode button").forEach(b=>b.classList.toggle("on",b.dataset.m===instMode()));
+  $("#mInstHint").textContent=instMode()==="B"?"예: 12만 원 3개월 할부 → 이번 달부터 매달 4만 원씩 예산에서 빠져요.":"예: 12만 원 3개월 할부 → 산 날 12만 원이 한 번에 예산에서 빠져요.";
   // 관리 탭 카드 목록
-  $("#cardList").innerHTML=S.cards.length?S.cards.map(c=>`<div class="item tap" data-card="${c.id}"><div class="emo">💳</div><div class="t"><b>${esc(c.name)}</b><small>${cardDesc(c)}</small></div><span class="chev">›</span></div>`).join(""):`<div class="muted" style="line-height:1.5;padding:4px 0">카드를 등록하면 기록할 때 결제수단·할부를 고를 수 있고, 카드값 나가는 날과 금액을 알려줘요.</div>`;
+  $("#cardList").innerHTML=S.cards.length?S.cards.map(c=>`<div class="item tap" data-card="${c.id}"><div class="emo">💳</div><div class="t"><b>${esc(c.name)}</b><small>${cardDesc(c)}${c.min?` · 실적 ${short(c.min)}원`:""}</small></div><span class="chev">›</span></div>`).join(""):`<div class="muted" style="line-height:1.5;padding:4px 0">카드를 등록하면 기록할 때 결제수단·할부를 고를 수 있고, 카드값 나가는 날과 금액을 알려줘요.</div>`;
 }
+$("#mInstMode").onclick=e=>{const b=e.target.closest("[data-m]");if(!b)return;S.settings.instMode=b.dataset.m;persist();toast(b.dataset.m==="B"?"할부는 매달 할부금만 예산에 반영해요":"할부도 산 날 전액을 예산에 반영해요")};
 $("#billCard").onclick=e=>{const r=e.target.closest("[data-bill]");openDay(r?r.dataset.bill:$("#billCard").dataset.date)};
 
 /* card sheet */
@@ -903,7 +953,7 @@ function cdInfo(){const pay=num($("#cdPay").value),cut=num($("#cdCut").value)||3
 function openCardSheet(card,fromAdd){
   CD={id:card?card.id:null,fromAdd:!!fromAdd};
   $("#cdTitle").textContent=card?"카드 수정":"신용카드 등록";
-  $("#cdName").value=card?card.name:"";$("#cdPay").value=card?card.pay:"";$("#cdCut").value=card&&card.cut&&card.cut<31?card.cut:"";
+  $("#cdMin").value=card&&card.min?card.min.toLocaleString("ko-KR"):"";$("#cdName").value=card?card.name:"";$("#cdPay").value=card?card.pay:"";$("#cdCut").value=card&&card.cut&&card.cut<31?card.cut:"";
   $("#cdPreset").innerHTML=CARD_PRESETS.map(([p,c])=>`<button class="chip" data-p="${p}" data-c="${c}">${p}일 결제 · ${c>=31?"전월 1일~말일":`전월 ${c+1}일~${p>c?"당월":"전월"} ${c}일`}</button>`).join("");
   $("#cdDel").classList.toggle("hidden",!card);cdInfo();open("#sCard");
 }
@@ -913,7 +963,7 @@ $("#cardList").onclick=e=>{const it=e.target.closest("[data-card]");if(it)openCa
 $("#cdSave").onclick=()=>{
   const name=$("#cdName").value.trim(),pay=Math.min(31,num($("#cdPay").value)),cut=Math.min(31,num($("#cdCut").value)||31);
   if(!name||!pay){toast("카드 이름과 결제일을 입력해주세요");return}
-  const rec={id:CD.id||uid(),name,pay,cut};
+  const rec={id:CD.id||uid(),name,pay,cut,min:num($("#cdMin").value)};
   S.cards=CD.id?S.cards.map(c=>c.id===CD.id?rec:c):[...S.cards,rec];
   if(CD.fromAdd){A.pay=rec.id;S.settings.lastPay=rec.id}
   persist();toast("저장했어요");
@@ -975,7 +1025,7 @@ let curDay=null;
 $("#calGrid").onclick=e=>{const b=e.target.closest("[data-day]");if(b)openDay(b.dataset.day)};
 function openDay(ds){
   curDay=ds;const d=parse(ds),list=sortTx(S.tx.filter(t=>t.date===ds));
-  const out=list.filter(t=>t.type==="out").reduce((a,t)=>a+t.amount,0);
+  const dSE=spendEntries().filter(x=>x.date===ds),out=dSE.reduce((a,x)=>a+x.amt,0),virt=dSE.filter(x=>x.n>1&&x.t.date!==ds);
   $("#dTitle").textContent=`${d.getMonth()+1}월 ${d.getDate()}일 ${WD[d.getDay()]}요일`;
   $("#dTotal").textContent=out?"-"+won(out):"";
   const phs=dayPhotos(ds),cov=coverOf(ds);
@@ -985,7 +1035,8 @@ function openDay(ds){
   const bills=billsOn(ds);
   $("#dBill").innerHTML=bills.map(b=>`<div class="card" style="background:var(--accent-soft);box-shadow:none;margin-bottom:10px"><div class="row"><b>💳 ${esc(b.card.name)} 결제${ds<ymd(new Date())?"됨":" 예정"}</b><b>${won(b.sum)}</b></div><div class="list">`+
     b.items.sort((x,y)=>y.t.date.localeCompare(x.t.date)).map(x=>{const c=catOf(x.t),td=parse(x.t.date);return `<div class="item tap" data-tx="${x.t.id}" style="border-color:color-mix(in srgb,var(--accent) 15%,transparent)"><div class="emo" style="background:var(--card)">${c.emoji}</div><div class="t"><b>${esc(x.t.memo||c.name)}<span class="ctag">${x.n>1?`할부 ${x.i}/${x.n}`:"일시불"}</span></b><small>${td.getMonth()+1}/${td.getDate()} 사용${x.n>1?` · 원금 ${won(x.t.amount)}`:""}</small></div><div class="amt">${won(x.amt)}</div></div>`}).join("")+`</div></div>`).join("")+(bills.length&&list.length?`<div class="dsec">이 날 쓴 돈</div>`:"");
-  $("#dList").innerHTML=list.length?list.map(t=>txRow(t,false)).join(""):(bills.length?"":`<div class="empty">${S.noSpend.includes(ds)?"무지출 데이였어요 ✌︎":"이 날은 기록이 없어요"}</div>`);
+  const vrows=virt.map(x=>{const c=catOf(x.t),td=parse(x.t.date);return `<div class="item tap" data-tx="${x.t.id}"><div class="emo">${c.emoji}</div><div class="t"><b>${esc(x.t.memo||c.name)}<span class="ctag">할부 ${x.i}/${x.n}</span></b><small>${td.getMonth()+1}/${td.getDate()} 구매 · 이번 회차 예산 차감</small></div><div class="amt">-${won(x.amt)}</div></div>`}).join("");
+  $("#dList").innerHTML=(list.length||vrows)?list.map(t=>txRow(t,false)).join("")+vrows:(bills.length?"":`<div class="empty">${S.noSpend.includes(ds)?"무지출 데이였어요 ✌︎":"이 날은 기록이 없어요"}</div>`);
   open("#sDay");
 }
 $("#dAdd").onclick=()=>openAdd(null,curDay);
