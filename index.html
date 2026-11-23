@@ -219,7 +219,9 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 .memo .dd.late{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}
 .memo .x{border:0;background:none;color:var(--sub);font-size:15px;cursor:pointer;padding:4px 2px;flex:none}
 /* goals v12 */
-.gsum{display:flex;justify-content:space-between;align-items:center}
+.gmsum{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 18px}
+.gmsum>div{min-width:0}
+.gmsum .tag{flex-shrink:0;white-space:nowrap}
 .gcard{border-radius:var(--r);overflow:hidden;position:relative;margin-bottom:12px;color:#fff;background:#3a2f45 center/cover;box-shadow:var(--shadow)}
 .gcard::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,12,30,.12),rgba(20,12,30,.72))}
 .gcard .in,.gvHead .in{position:relative;padding:16px 18px 14px}
@@ -363,7 +365,7 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 
   <!-- GOALS -->
   <section id="v-goals" class="hidden">
-    <div class="card gsum"><div><div class="label" style="margin:0">이번 달 목표로 옮긴 돈</div><div class="mid" id="gMonth" style="color:var(--save)">0원</div></div><span class="tag" id="gBadge" style="font-size:12px"></span></div>
+    <div class="card gmsum"><div><div class="label" style="margin:0">이번 달 목표로 옮긴 돈</div><div class="mid" id="gMonth" style="color:var(--save)">0원</div></div><span class="tag" id="gBadge" style="font-size:12px"></span></div>
     <div id="gList"></div>
     <button class="btn soft block" id="addGoal">+ 목표 추가</button>
     <div class="secT2"><b>💪 챌린지</b><span class="muted tap" id="chNew">+ 새 챌린지</span></div>
