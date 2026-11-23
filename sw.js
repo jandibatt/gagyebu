@@ -1,5 +1,5 @@
 // 오프라인에서도 앱이 열리게 해주는 파일 (데이터는 다루지 않아요)
-const CACHE="gagyebu-v10";
+const CACHE="gagyebu-v11";
 const FILES=["./","./index.html","./icon-180.png","./manifest.json"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)));self.skipWaiting()});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim()});
