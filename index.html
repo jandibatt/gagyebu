@@ -218,6 +218,66 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 .memo .dd.soon{background:var(--accent-soft);color:var(--accent-ink)}
 .memo .dd.late{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}
 .memo .x{border:0;background:none;color:var(--sub);font-size:15px;cursor:pointer;padding:4px 2px;flex:none}
+/* goals v12 */
+.gsum{display:flex;justify-content:space-between;align-items:center}
+.gcard{border-radius:var(--r);overflow:hidden;position:relative;margin-bottom:12px;color:#fff;background:#3a2f45 center/cover;box-shadow:var(--shadow)}
+.gcard::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,12,30,.12),rgba(20,12,30,.72))}
+.gcard .in,.gvHead .in{position:relative;padding:16px 18px 14px}
+.gcard .nm{font-size:16px;font-weight:800;text-shadow:0 1px 6px rgba(0,0,0,.25)}
+.gcard .pc{font-size:28px;font-weight:900;letter-spacing:-1px;text-shadow:0 1px 6px rgba(0,0,0,.25)}
+.gsm{font-size:12px;opacity:.92;display:flex;justify-content:space-between;gap:8px}
+.pbar{position:relative;height:10px;border-radius:99px;background:rgba(255,255,255,.24);margin:12px 0 9px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.pbar .fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,rgba(255,255,255,.7),#fff);box-shadow:0 0 12px rgba(255,255,255,.5);transition:width .5s}
+.pbar .tk{position:absolute;top:2px;bottom:2px;width:1.5px;background:rgba(255,255,255,.38);border-radius:2px}
+.pbar .dot{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);box-shadow:0 0 0 4px rgba(255,255,255,.3)}
+.gcard.plain,.gvHead.plain{background:var(--card);color:var(--ink)}
+.gcard.plain::before,.gvHead.plain::before{display:none}
+.plain .nm,.plain .pc{text-shadow:none}.plain .pc{color:var(--accent)}
+.plain .gsm{color:var(--sub);opacity:1}
+.plain .pbar{background:var(--line)}.plain .pbar .fill{background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 55%,var(--card)),var(--accent));box-shadow:none}
+.plain .pbar .tk{background:color-mix(in srgb,var(--accent) 22%,transparent)}.plain .pbar .dot{background:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 20%,transparent)}
+.gvHead{margin:-2px -20px 14px;min-height:190px;display:flex;align-items:flex-end;position:relative;color:#fff;background:#3a2f45 center/cover}
+.gvHead::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(20,12,30,.74))}
+.gvHead .in{width:100%;padding:16px 20px}
+.gvHead .nm{font-size:15px;font-weight:700}.gvHead .pc{font-size:40px;font-weight:900;letter-spacing:-1.5px;line-height:1.1}
+.gvHead.plain{background:var(--accent-soft);color:var(--ink)}.gvHead.plain .pc{color:var(--accent)}
+.gneed{font-size:12px;margin-top:6px;opacity:.9}
+.graph{display:flex;align-items:flex-end;gap:10px;height:96px;padding:0 4px;position:relative;margin-top:10px}
+.graph .b{flex:1;background:color-mix(in srgb,var(--accent) 55%,var(--card));border-radius:6px 6px 0 0;position:relative}
+.graph .b.x{background:color-mix(in srgb,var(--accent) 30%,var(--card))}
+.graph .b span{position:absolute;bottom:-18px;left:0;right:0;text-align:center;font-size:10px;color:var(--sub)}
+.graph svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.gphoto{display:flex;gap:10px;align-items:stretch;margin-bottom:10px}
+.gpv{width:120px;height:68px;border-radius:12px;background:var(--chip) center/cover;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--sub)}
+.vth{width:52px;height:34px;border-radius:8px;border:0;background:var(--chip) center/cover;cursor:pointer}
+/* challenges */
+.secT2{display:flex;justify-content:space-between;align-items:center;margin:22px 4px 10px}
+.secT2 b{font-size:16px}
+.ch{background:var(--card);border-radius:18px;padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow)}
+.ch b{font-size:14.5px}
+.dots7{display:flex;gap:4px;margin:10px 0 7px}.dots7 i{flex:1;height:8px;border-radius:99px;background:var(--line)}.dots7 i.on{background:var(--accent)}
+.cbadge{font-size:11.5px;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);border-radius:99px;padding:3px 9px;white-space:nowrap}
+.chPastT{font-size:13px;font-weight:600;color:var(--sub);margin:6px 4px 10px}
+.chPastT .chv{display:inline-block;font-size:11px;margin-left:4px}
+.grpT{font-size:12.5px;font-weight:800;color:var(--sub);margin:14px 2px 7px}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tp{background:var(--bg);border:0;border-radius:16px;padding:11px 12px;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink)}
+.tp .e{font-size:20px}.tp b{display:block;font-size:13.5px;margin-top:4px}.tp small{display:block;font-size:11px;color:var(--sub);margin-top:2px;line-height:1.35}
+.tp.on{outline:2.5px solid var(--accent);background:var(--accent-soft)}
+/* celebrate */
+#celebrate{position:fixed;inset:0;z-index:45;background:rgba(20,12,10,.55);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .25s;overflow:hidden}
+#celebrate.show{opacity:1}
+.cbox{background:var(--card);border-radius:28px;padding:26px 22px 20px;width:min(320px,84vw);text-align:center;transform:scale(.85);transition:transform .35s cubic-bezier(.2,1.4,.4,1);position:relative;z-index:2}
+#celebrate.show .cbox{transform:none}
+.cring{width:110px;height:110px;margin:0 auto 14px;border-radius:50%;background:var(--accent-soft) center/cover;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 0 0 5px var(--card),0 0 0 8px var(--accent)}
+.cring span{font-size:30px;font-weight:900;color:var(--accent);letter-spacing:-1px;position:relative}
+.cring.ph::before{content:"";position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,.35)}
+.cring.ph span{color:#fff}
+.cbox b{font-size:19px;display:block;letter-spacing:-.5px}
+.cbox .muted{margin:6px 0 16px}
+#confetti{position:absolute;inset:0;pointer-events:none;z-index:1}
+#confetti i{position:absolute;top:-20px;width:8px;height:14px;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
 /* category drill-down */
 .crow{padding:11px 0;border-top:1px solid var(--line);cursor:pointer}
 .crow:first-child{border-top:0}
@@ -303,13 +363,12 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 
   <!-- GOALS -->
   <section id="v-goals" class="hidden">
-    <div class="card hero">
-      <div class="label">이번 달 저축·투자로 옮긴 돈</div>
-      <div class="big" id="gMonth" style="color:var(--save)">0원</div>
-      <div class="muted" style="margin-top:6px;line-height:1.5">기록할 때 ‘저축’을 고르고 목표를 선택하면 여기 쌓여요. 지출로는 잡히지 않아요.</div>
-    </div>
+    <div class="card gsum"><div><div class="label" style="margin:0">이번 달 목표로 옮긴 돈</div><div class="mid" id="gMonth" style="color:var(--save)">0원</div></div><span class="tag" id="gBadge" style="font-size:12px"></span></div>
     <div id="gList"></div>
     <button class="btn soft block" id="addGoal">+ 목표 추가</button>
+    <div class="secT2"><b>💪 챌린지</b><span class="muted tap" id="chNew">+ 새 챌린지</span></div>
+    <div id="chList"></div>
+    <div id="chPast"></div>
   </section>
 
   <!-- MANAGE -->
@@ -479,8 +538,33 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
   <div class="fl">목표 금액</div><input class="f" id="gTarget" inputmode="numeric" placeholder="0">
   <div class="fl">지금까지 모은 돈</div><input class="f" id="gStart" inputmode="numeric" placeholder="0">
   <div class="fl">목표 시점 (선택)</div><input class="f" id="gDue" type="month">
+  <div class="fl">사진 (선택) · 카드 배경이 돼요</div>
+  <div class="gphoto"><div class="gpv" id="gPv"></div><div style="flex:1;display:flex;flex-direction:column;gap:6px">
+    <label class="btn plain" style="text-align:center;position:relative;padding:10px">📷 사진 고르기<input type="file" accept="image/*" id="gPhotoFile" style="position:absolute;inset:0;opacity:0;width:100%"></label>
+    <button class="btn danger hidden" id="gPhotoX" style="padding:6px">사진 빼기</button></div></div>
+  <div id="gVisWrap" class="hidden"><div class="fl">홈 자극 사진에서 고르기</div><div class="chips" id="gVisPick"></div></div>
   <button class="btn block" id="gSave">저장</button>
   <button class="btn danger block hidden" id="gDel" style="margin-top:4px">삭제</button>
+</div>
+
+<!-- GOAL VIEW -->
+<div class="sheet" id="sGoalView" style="padding-top:0;overflow-x:hidden"><div class="grab" style="position:absolute;left:50%;transform:translateX(-50%);top:10px;z-index:3;background:rgba(255,255,255,.7)"></div>
+  <div class="gvHead" id="gvHead"></div>
+  <div class="card" id="gvGraph"></div>
+  <div class="card" id="gvRecent"></div>
+  <div class="row" style="gap:8px"><button class="btn plain" style="flex:1" id="gvEdit">목표 수정</button><button class="btn" style="flex:1" id="gvAdd">+ 적립 기록</button></div>
+</div>
+<!-- CHALLENGE SHEETS -->
+<div class="sheet" id="sChNew"><div class="grab"></div>
+  <h2>새 챌린지</h2><div class="muted" style="margin:-10px 0 4px">기록하면 앱이 알아서 체크해요 · 성공하면 🏅 배지</div>
+  <div id="cnTypes"></div>
+  <div id="cnCfg" style="margin-top:16px"></div>
+  <div class="instInfo" id="cnPrev" style="margin:4px 0 14px"></div>
+  <button class="btn block" id="cnStart">챌린지 시작</button>
+</div>
+<div class="sheet" id="sChView"><div class="grab"></div>
+  <h2 id="cvTitle"></h2><div id="cvBody"></div>
+  <button class="btn danger block" id="cvDel">챌린지 그만두기</button>
 </div>
 
 <!-- CATEGORY SHEET -->
@@ -496,6 +580,7 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 </div>
 
 <input type="file" accept="image/*" multiple id="vAddFile" class="hidden">
+<div id="celebrate" class="hidden"><div id="confetti"></div><div class="cbox"><div class="cring" id="cbRing"></div><b id="cbTitle"></b><div class="muted" id="cbSub"></div><button class="btn block" id="cbOk">좋아요!</button></div></div>
 <div id="cropper" class="hidden">
   <div class="cr-top"><button id="crCancel">취소</button><b>사진 자르기</b><button id="crDone">완료</button></div>
   <div id="crStage"><img id="crImg" alt=""><div id="crFrame"></div></div>
@@ -537,7 +622,7 @@ const SUGCATS={
 };
 function defCats(){const o={};for(const t in DEFCATS)o[t]=DEFCATS[t].map(([n,e])=>({id:uid()+t.slice(0,1),name:n,emoji:e}));return o}
 
-const DEF={v:8,updatedAt:0,settings:{payday:7,income:0,budget:0,name:"",theme:"rose",lastBackup:""},cats:null,tx:[],fixed:[],goals:[],noSpend:[],covers:{},autoKeys:{},memos:[],vision:[],cards:[],fgroups:[]};
+const DEF={v:8,updatedAt:0,settings:{payday:7,income:0,budget:0,name:"",theme:"rose",lastBackup:""},cats:null,tx:[],fixed:[],goals:[],noSpend:[],covers:{},autoKeys:{},memos:[],vision:[],cards:[],fgroups:[],challenges:[],goalMarks:{}};
 const THEME_KEYS=["bg","card","ink","sub","line","chip","accent","accent-soft","accent-ink","save","save-soft","onacc"];
 const THEMES={
  rose:{name:"로즈 밀크티",l:"#f8f5f2 #ffffff #2a2523 #8c817c #ede7e2 #f3eeea #b46c5b #f6e9e4 #8e4e40 #5f8572 #e6efe9 #fff",d:"#171413 #221e1c #f3eeea #a39893 #332d2a #2b2624 #e0a291 #3a2924 #f0c2b5 #9cc0ac #22302a #2a1a15"},
@@ -573,9 +658,10 @@ const idbKeys=st=>tx_(st,"readonly",s=>s.getAllKeys());
 function normalize(d){
   const o=Object.assign(JSON.parse(JSON.stringify(DEF)),d||{});
   o.settings=Object.assign({},DEF.settings,o.settings||{});
-  ["tx","fixed","goals","noSpend","memos","vision","cards","fgroups"].forEach(k=>{if(!Array.isArray(o[k]))o[k]=[]});
+  ["tx","fixed","goals","noSpend","memos","vision","cards","fgroups","challenges"].forEach(k=>{if(!Array.isArray(o[k]))o[k]=[]});
   if(!o.covers||typeof o.covers!=="object")o.covers={};
   if(!o.autoKeys||typeof o.autoKeys!=="object")o.autoKeys={};
+  if(!o.goalMarks||typeof o.goalMarks!=="object")o.goalMarks={};
   o.fixed.forEach(f=>{if(!f.kind)f.kind="고정"});
   if(!o.fgroups.length)o.fgroups=defGroups();
   o.fixed.forEach(f=>{ // v7 → v8: '매달 n일' → 주기 규칙
@@ -597,7 +683,7 @@ function normalize(d){
 }
 let saveTimer=null;
 function persist(){
-  S.updatedAt=Date.now();render();
+  S.updatedAt=Date.now();render();try{checkMilestones()}catch(e){}
   clearTimeout(saveTimer);saveTimer=setTimeout(saveNow,300);
 }
 async function saveNow(){
@@ -610,6 +696,7 @@ async function boot(){
   try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}
   setSync(idb?"📱 이 폰에 저장됨":"⚠︎ 임시 저장");
   if(runAuto())persist();else render();
+  try{checkMilestones()}catch(e){}
   if("serviceWorker" in navigator&&location.protocol==="https:"){try{navigator.serviceWorker.register("sw.js")}catch(e){}}
 }
 
@@ -782,19 +869,10 @@ function render(){
   renderCal(today,tstr);
 
   /* goals */
-  $("#gMonth").textContent=won(saved);
-  $("#gList").innerHTML=S.goals.length?S.goals.map(g=>`<div class="card tap" data-goal="${g.id}">${goalHTML(g)}</div>`).join(""):`<div class="empty">아직 목표가 없어요.<br>모으는 이유가 보이면 덜 쓰게 돼요.</div>`;
+  renderGoals(saved);
 
   /* manage */
   renderManage(p,fixedSum,today,rs,planned);
-}
-function goalHTML(g){
-  const s=goalSaved(g),pct=g.target?Math.min(100,s/g.target*100):0;
-  let need="";
-  if(g.due&&g.target>s){const[y,m]=g.due.split("-").map(Number),n=new Date(),mo=(y-n.getFullYear())*12+(m-1-n.getMonth());need=mo>0?`월 ${short(Math.ceil((g.target-s)/mo))}원씩`:"목표 시점 지남"}
-  return `<div class="row"><b style="font-size:16px">${esc(g.name)}</b><span class="mid" style="color:var(--save);font-size:18px">${Math.floor(pct)}%</span></div>
-  <div class="bar save"><i style="width:${pct}%"></i></div>
-  <div class="row muted"><span>${won(s)} / ${won(g.target)}</span><span>${[g.due?g.due.replace("-",".")+"까지":"",need].filter(Boolean).join(" · ")}</span></div>`;
 }
 
 /* calendar */
@@ -1378,18 +1456,203 @@ armDelete($("#geDel"),"삭제",()=>{
   if(fFilter===GEd.id)fFilter="";persist();toast("삭제했어요 (항목은 ‘"+(S.fgroups.find(g=>g.id===to).name)+"’로 옮겨졌어요)");openGroups();
 });
 
-/* goals */
-let GE=null;
-const SUG=["내 집 마련 자금","비상금","호주 이민 준비","여행 자금","노후·조기은퇴"];
-function openGoal(g){GE=g?g.id:null;$("#sGoalTitle").textContent=g?"목표 수정":"새 저축 목표";$("#gSuggest").classList.toggle("hidden",!!g);$("#gSuggest").innerHTML=SUG.map(s=>`<button class="chip" data-s="${s}">${s}</button>`).join("");
-  $("#gName").value=g?g.name:"";$("#gTarget").value=g&&g.target?g.target.toLocaleString("ko-KR"):"";$("#gStart").value=g&&g.start?g.start.toLocaleString("ko-KR"):"";$("#gDue").value=g&&g.due||"";$("#gDel").classList.toggle("hidden",!g);open("#sGoal")}
+/* ---------- 목표 ---------- */
+const goalPct=g=>g.target?Math.min(100,goalSaved(g)/g.target*100):0;
+function goalBar(p){const tk=[1,2,3,4,5,6,7,8,9].map(i=>`<span class="tk" style="left:${i*10}%"></span>`).join("");return `<div class="pbar"><span class="fill" style="width:${p}%"></span>${tk}<span class="dot" style="left:${p}%"></span></div>`}
+function goalNext(g){const s=goalSaved(g);if(!g.target)return "";if(s>=g.target)return "🎉 목표 달성!";const t=Math.min(10,Math.floor(s/g.target*10)+1);return `${t===10?"목표":t*10+"%"}까지 ${won(Math.ceil(g.target*t/10-s))}`}
+function goalNeed(g){const s=goalSaved(g);if(!g.due||g.target<=s)return "";const[y,m]=g.due.split("-").map(Number),n=new Date(),mo=(y-n.getFullYear())*12+(m-1-n.getMonth());return mo>0?`월 ${short(Math.ceil((g.target-s)/mo))}원씩 모으면 돼요`:"목표 시점이 지났어요"}
+function goalCard(g){
+  const s=goalSaved(g),p=goalPct(g),src=photoSrc(g.photo);
+  return `<div class="gcard ${src?"":"plain"} tap" data-goal="${g.id}" ${src?`style="background-image:url('${src}')"`:""}><div class="in">
+    <div class="row"><span class="nm">${esc(g.name)}</span><span class="pc">${Math.floor(p)}%</span></div>${goalBar(p)}
+    <div class="gsm"><span>${won(s)} / ${won(g.target)}</span><span>${goalNext(g)}</span></div></div></div>`;
+}
+function renderGoals(saved){
+  $("#gMonth").textContent=won(saved);
+  const badges=S.challenges.filter(c=>c.result==="ok").length;
+  $("#gBadge").textContent=`🏅 챌린지 배지 ${badges}개`;
+  $("#gList").innerHTML=S.goals.length?S.goals.map(goalCard).join(""):`<div class="empty">아직 목표가 없어요.<br>모으는 이유가 보이면 덜 쓰게 돼요.</div>`;
+  renderChallenges();
+  if(openSheet&&openSheet.id==="sGoalView"&&GV)drawGoalView();
+}
+/* 목표 상세 */
+let GV=null;
+function openGoalView(id){GV=id;drawGoalView();open("#sGoalView")}
+function drawGoalView(){
+  const g=S.goals.find(x=>x.id===GV);if(!g){close();return}
+  const s=goalSaved(g),p=goalPct(g),src=photoSrc(g.photo);
+  $("#gvHead").className="gvHead"+(src?"":" plain");$("#gvHead").style.backgroundImage=src?`url('${src}')`:"";
+  $("#gvHead").innerHTML=`<div class="in"><div class="nm">${esc(g.name)}</div><div class="pc">${Math.floor(p)}%</div>${goalBar(p)}
+    <div class="gsm"><span>${won(s)} / ${won(g.target)}${g.due?` · ${g.due.replace("-",".")} 목표`:""}</span><span>${goalNext(g)}</span></div>${goalNeed(g)?`<div class="gneed">${goalNeed(g)}</div>`:""}</div>`;
+  // 월별 적립 (최근 6개월)
+  const txs=S.tx.filter(t=>t.type==="save"&&t.goalId===g.id),now=new Date(),months=[];
+  for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);months.push({y:d.getFullYear(),m:d.getMonth(),key:ymOf(d)})}
+  months.forEach(mo=>{mo.sum=txs.filter(t=>t.date.startsWith(mo.key)).reduce((a,t)=>a+t.amount,0);
+    const end=ymd(new Date(mo.y,mo.m+1,0));mo.cum=(g.start||0)+txs.filter(t=>t.date<=end).reduce((a,t)=>a+t.amount,0)});
+  const mx=Math.max(1,...months.map(m=>m.sum)),cmx=Math.max(1,...months.map(m=>m.cum)),avg=Math.round(months.reduce((a,m)=>a+m.sum,0)/6);
+  const pts=months.map((m,i)=>`${(i+.5)/6*100},${100-m.cum/cmx*88}`).join(" ");
+  $("#gvGraph").innerHTML=`<div class="label">월별 적립</div>`+(txs.length?`<div class="graph">${months.map((m,i)=>`<div class="b ${i===5?"x":""}" style="height:${Math.max(2,m.sum/mx*100)}%"><span>${m.m+1}월</span></div>`).join("")}
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="var(--save)" stroke-width="2.2" vector-effect="non-scaling-stroke"/></svg></div>
+    <div class="row muted" style="margin-top:26px;font-size:12px"><span><span style="color:color-mix(in srgb,var(--accent) 55%,var(--card))">■</span> 그달 모은 돈 · <span style="color:var(--save)">━</span> 누적</span><span>월평균 ${won(avg)}</span></div>`:`<div class="muted" style="padding:10px 0 4px">아직 이 목표로 모은 기록이 없어요. 저축을 기록할 때 이 목표를 고르면 쌓여요.</div>`);
+  const rec=sortTx([...txs]).slice(0,5);
+  $("#gvRecent").innerHTML=`<div class="label">최근 적립</div>`+(rec.length?`<div class="list">`+rec.map(t=>{const d=parse(t.date);return `<div class="item tap" data-tx="${t.id}"><div class="emo">${t.auto?"🔁":"🏦"}</div><div class="t"><b>${esc(t.memo||catOf(t).name)}</b><small>${d.getMonth()+1}/${d.getDate()} · ${t.auto?"자동이체":"직접 기록"}</small></div><div class="amt save">+${won(t.amount)}</div></div>`}).join("")+`</div>`:`<div class="muted" style="padding:6px 0">아직 없어요</div>`);
+}
+$("#gvEdit").onclick=()=>{const g=S.goals.find(x=>x.id===GV);if(g)openGoal(g)};
+$("#gvAdd").onclick=()=>{const id=GV;openAdd();A.type="save";A.c=S.cats.save[0].id;A.goalId=id;drawAdd()};
+$("#gList").onclick=e=>{const it=e.target.closest("[data-goal]");if(it)openGoalView(it.dataset.goal)};
+
+/* 10%마다 축하 */
+function checkMilestones(){
+  let hit=null;
+  S.goals.forEach(g=>{if(!g.target)return;const t=Math.min(10,Math.floor(goalSaved(g)/g.target*10)),prev=S.goalMarks[g.id];
+    if(prev!==undefined&&t>prev&&(!hit||t>hit.t))hit={g,t};S.goalMarks[g.id]=t});
+  if(hit)celebrate(hit.g,hit.t);
+}
+function celebrate(g,t){
+  const src=photoSrc(g.photo),el=$("#celebrate");
+  $("#cbRing").style.backgroundImage=src?`url('${src}')`:"";$("#cbRing").classList.toggle("ph",!!src);
+  $("#cbRing").innerHTML=`<span>${t*10}%</span>`;
+  $("#cbTitle").textContent=t>=10?`${g.name} 목표 달성! 🎉`:`${g.name} ${t*10}% 달성!`;
+  $("#cbSub").textContent=t>=10?"끝까지 해냈어요. 정말 멋져요 💜":goalNext(g)+" 남았어요";
+  const cf=$("#confetti"),cols=["var(--accent)","var(--save)","#f2b705","#e8a5bf","#7fb3dc","#fff"];
+  cf.innerHTML=Array.from({length:46},(_,i)=>`<i style="left:${Math.random()*100}%;background:${cols[i%cols.length]};animation-delay:${Math.random()*.6}s;animation-duration:${1.6+Math.random()*1.4}s;transform:rotate(${Math.random()*360}deg);${i%3?"":"border-radius:50%;"}"></i>`).join("");
+  el.classList.remove("hidden");requestAnimationFrame(()=>el.classList.add("show"));
+}
+$("#celebrate").onclick=()=>{const el=$("#celebrate");el.classList.remove("show");setTimeout(()=>el.classList.add("hidden"),250)};
+
+/* 목표 추가·수정 (사진 포함) */
+let GE=null,GEp=null;
+const SUG=["내 집 마련 자금","비상금","호주 이민 준비","여행 자금","콘서트 적금","노후·조기은퇴"];
+function drawGoalPhoto(){
+  const src=photoSrc(GEp);$("#gPv").style.backgroundImage=src?`url('${src}')`:"";$("#gPv").classList.toggle("empty",!src);
+  $("#gPv").innerHTML=src?"":"사진 없음";$("#gPhotoX").classList.toggle("hidden",!GEp);
+  $("#gVisWrap").classList.toggle("hidden",!S.vision.length);
+  $("#gVisPick").innerHTML=S.vision.map((v,i)=>`<button class="vth" data-vi="${i}" style="background-image:url('${photoSrc(v)}')"></button>`).join("");
+}
+function openGoal(g){GE=g?g.id:null;GEp=g&&g.photo||null;
+  $("#sGoalTitle").textContent=g?"목표 수정":"새 저축 목표";$("#gSuggest").classList.toggle("hidden",!!g);$("#gSuggest").innerHTML=SUG.map(s=>`<button class="chip" data-s="${s}">${s}</button>`).join("");
+  $("#gName").value=g?g.name:"";$("#gTarget").value=g&&g.target?g.target.toLocaleString("ko-KR"):"";$("#gStart").value=g&&g.start?g.start.toLocaleString("ko-KR"):"";$("#gDue").value=g&&g.due||"";$("#gDel").classList.toggle("hidden",!g);
+  drawGoalPhoto();open("#sGoal")}
+const isNewPhoto=()=>{const g=S.goals.find(x=>x.id===GE);return GEp&&(!g||!g.photo||g.photo.k!==GEp.k)};
+$("#gPhotoFile").onchange=async e=>{const f=e.target.files&&e.target.files[0];e.target.value="";if(!f)return;
+  try{const b=await pickCropped(f,"1.7778");if(!b)return;const p=await storePhoto(b);if(isNewPhoto())dropPhoto(GEp);GEp=p;drawGoalPhoto()}catch(err){toast("사진을 불러오지 못했어요")}};
+$("#gVisPick").onclick=async e=>{const b=e.target.closest("[data-vi]");if(!b)return;const v=S.vision[+b.dataset.vi];if(!v)return;
+  try{let p;if(v.data)p={k:uid(),data:v.data};else{const bl=await idbGet("photos",v.k);if(!bl)throw 0;const k=uid();await idbPut("photos",k,bl);urlCache[k]=URL.createObjectURL(bl);p={k}}
+    if(isNewPhoto())dropPhoto(GEp);GEp=p;drawGoalPhoto()}catch(err){toast("사진을 가져오지 못했어요")}};
+$("#gPhotoX").onclick=()=>{if(isNewPhoto())dropPhoto(GEp);GEp=null;drawGoalPhoto()};
 $("#gSuggest").onclick=e=>{const b=e.target.closest("[data-s]");if(b)$("#gName").value=b.dataset.s};
 $("#addGoal").onclick=()=>openGoal();
-$("#gList").onclick=e=>{const it=e.target.closest("[data-goal]");if(it)openGoal(S.goals.find(g=>g.id===it.dataset.goal))};
 $("#gSave").onclick=()=>{const name=$("#gName").value.trim();if(!name){toast("목표 이름을 입력해주세요");return}
-  const rec={id:GE||uid(),name,target:num($("#gTarget").value),start:num($("#gStart").value),due:$("#gDue").value||""};
-  S.goals=GE?S.goals.map(g=>g.id===GE?rec:g):[...S.goals,rec];persist();close();toast("저장했어요")};
-armDelete($("#gDel"),"삭제",()=>{S.goals=S.goals.filter(g=>g.id!==GE);S.tx.forEach(t=>{if(t.goalId===GE)t.goalId=null});S.fixed.forEach(f=>{if(f.goalId===GE)f.goalId=null});persist();close();toast("삭제했어요")});
+  const old=S.goals.find(x=>x.id===GE);
+  if(old&&old.photo&&(!GEp||old.photo.k!==GEp.k))dropPhoto(old.photo);
+  const rec={id:GE||uid(),name,target:num($("#gTarget").value),start:num($("#gStart").value),due:$("#gDue").value||"",photo:GEp||null};
+  S.goals=GE?S.goals.map(g=>g.id===GE?rec:g):[...S.goals,rec];
+  if(!old)S.goalMarks[rec.id]=rec.target?Math.min(10,Math.floor(goalSaved(rec)/rec.target*10)):0;
+  persist();toast("저장했어요");if(old&&GV===rec.id){drawGoalView();open("#sGoalView")}else close()};
+armDelete($("#gDel"),"삭제",()=>{const g=S.goals.find(x=>x.id===GE);if(g)dropPhoto(g.photo);
+  S.goals=S.goals.filter(g=>g.id!==GE);S.tx.forEach(t=>{if(t.goalId===GE)t.goalId=null});S.fixed.forEach(f=>{if(f.goalId===GE)f.goalId=null});S.vision.forEach(v=>{if(v.goalId===GE)v.goalId=null});delete S.goalMarks[GE];
+  GV=null;persist();close();toast("삭제했어요")});
+
+/* ---------- 챌린지 (자동 체크 · 성공하면 배지만) ---------- */
+const CHT=[
+ {k:"cnt",g:"📉 줄이기",e:"☕️",t:"횟수 줄이기",ex:"카페 주 3번 이하",cat:true,n:3,unit:"번 이하",dur:7},
+ {k:"amt",g:"📉 줄이기",e:"💸",t:"금액 한도",ex:"이번 주 덕질비 5만 원 이하",cat:true,n:50000,money:true,unit:"원 이하",dur:7},
+ {k:"zero",g:"📉 줄이기",e:"🚫",t:"0회 도전",ex:"일주일 배달 0번",cat:true,dur:7},
+ {k:"pause",g:"📉 줄이기",e:"🛍️",t:"충동구매 멈춤",ex:"쇼핑 2주 쉬기",cat:true,dur:14},
+ {k:"nsdays",g:"🙅‍♀️ 무지출",e:"📆",t:"무지출 데이 N일",ex:"이번 월급 기간 무지출 8일",n:8,unit:"일",period:true},
+ {k:"nsstreak",g:"🙅‍♀️ 무지출",e:"🔥",t:"연속 무지출",ex:"3일 연속 무지출",n:3,unit:"일 연속",dur:14},
+ {k:"log",g:"✍️ 습관",e:"📒",t:"연속 기록",ex:"30일 연속 가계부 쓰기",n:30,unit:"일 연속"},
+ {k:"daily",g:"✍️ 습관",e:"🎯",t:"하루 예산 지키기",ex:"7일 연속 ‘오늘 써도 되는 돈’ 안 넘기기",n:7,unit:"일 연속"},
+ {k:"w52",g:"🐷 모으기",e:"📈",t:"52주 저축",ex:"매주 1천 원씩 늘려 모으기",n:1000,money:true,unit:"원씩 늘리기"},
+ {k:"leave",g:"🐷 모으기",e:"🌷",t:"예산 남기기",ex:"이번 월급 기간 생활비 10% 남기기",n:10,unit:"% 남기기",period:true}
+];
+const chType=k=>CHT.find(x=>x.k===k);
+const durLabel=d=>d===7?"1주":d===14?"2주":d===30?"한 달":d+"일";
+const dayDiff=(a,b)=>Math.round((parse(b)-parse(a))/864e5);
+function chTitle(c){const T=chType(c.k),cat=c.cat&&S.cats.out.find(x=>x.id===c.cat),cn=cat?cat.name:"",ce=cat?cat.emoji:T.e;
+  switch(c.k){case "cnt":return `${ce} ${durLabel(c.days)} 동안 ${cn} ${c.n}번 이하`;case "amt":return `${ce} ${durLabel(c.days)} 동안 ${cn} ${short(c.n)}원 이하`;
+  case "zero":return `${ce} ${durLabel(c.days)} 동안 ${cn} 0번`;case "pause":return `${ce} ${durLabel(c.days)} 동안 ${cn} 쉬기`;
+  case "nsdays":return `📆 이번 월급 기간 무지출 ${c.n}일`;case "nsstreak":return `🔥 ${durLabel(c.days)} 안에 ${c.n}일 연속 무지출`;
+  case "log":return `📒 ${c.n}일 연속 가계부 쓰기`;case "daily":return `🎯 ${c.n}일 연속 하루 예산 지키기`;
+  case "w52":return `📈 52주 저축 (매주 ${short(c.n)}원씩 늘리기)`;case "leave":return `🌷 이번 월급 기간 생활비 ${c.n}% 남기기`}}
+const outOn=d=>S.tx.filter(t=>t.date===d&&t.type==="out").reduce((a,t)=>a+t.amount,0);
+function chEval(c){
+  const ts=ymd(new Date()),end=ymd(addDays(parse(c.start),c.days-1)),upto=ts<end?ts:end,over=ts>end;
+  const inWin=t=>t.date>=c.start&&t.date<=upto;
+  const r={seg:0,fill:0,pct:0,txt:"",st:"run",end,dleft:Math.max(0,dayDiff(ts,end))};
+  const catTx=()=>S.tx.filter(t=>t.type==="out"&&t.c===c.cat&&inWin(t));
+  const days=(a,b)=>{const o=[];for(let d=parse(a);ymd(d)<=b;d=addDays(d,1))o.push(ymd(d));return o};
+  if(c.k==="cnt"){const n=catTx().length;r.seg=c.n;r.fill=n;r.txt=`${n} / ${c.n}번 사용`;r.st=n>c.n?"fail":over?"ok":"run";r.pct=n/c.n}
+  else if(c.k==="amt"){const v=catTx().reduce((a,t)=>a+t.amount,0);r.pct=v/c.n;r.txt=`${won(v)} / ${won(c.n)}`;r.st=v>c.n?"fail":over?"ok":"run"}
+  else if(c.k==="zero"||c.k==="pause"){const n=catTx().length,el=Math.min(c.days,dayDiff(c.start,ts)+1);r.pct=el/c.days;r.txt=n?`${n}번 써버렸어요`:`${el} / ${c.days}일째 참는 중`;r.st=n?"fail":over?"ok":"run"}
+  else if(c.k==="nsdays"){const n=S.noSpend.filter(d=>d>=c.start&&d<=upto).length;r.seg=c.n;r.fill=n;r.txt=`무지출 ${n} / ${c.n}일`;r.st=n>=c.n?"ok":over?"fail":"run"}
+  else if(c.k==="nsstreak"){let best=0,cur=0;days(c.start,upto).forEach(d=>{if(S.noSpend.includes(d)){cur++;best=Math.max(best,cur)}else if(d!==ts)cur=0});r.seg=c.n;r.fill=Math.min(c.n,cur);r.txt=`지금 ${cur}일 연속 · 최고 ${best}일`;r.st=best>=c.n?"ok":over?"fail":"run"}
+  else if(c.k==="log"||c.k==="daily"){
+    const per=periodOf(new Date(),0),lim=S.settings.budget?Math.floor(S.settings.budget/(dayDiff(per.s,per.e)+1)):0;
+    if(c.k==="daily"&&!lim){r.txt="관리 탭에서 생활비 예산을 먼저 정해주세요";return r}
+    const good=d=>c.k==="log"?recorded(d):outOn(d)<=lim;
+    let n=0,broke=false;for(const d of days(c.start,upto)){if(d===ts){if(c.k==="log"&&good(d))n++;continue}if(good(d))n++;else{broke=true;break}}
+    r.seg=c.n<=14?c.n:0;r.fill=Math.min(c.n,n);r.pct=n/c.n;r.txt=c.k==="log"?`${n} / ${c.n}일 연속 기록`:`${n} / ${c.n}일 · 하루 ${won(lim)} 이하`;
+    r.st=broke?"fail":n>=c.n?"ok":"run";
+  }
+  else if(c.k==="w52"){const w=Math.min(52,Math.floor(dayDiff(c.start,ts)/7)+1),need=c.n*w*(w+1)/2,total=c.n*1378,v=S.tx.filter(t=>t.type==="save"&&t.date>=c.start).reduce((a,t)=>a+t.amount,0);
+    r.pct=v/total;r.txt=`${w}주차 · 이번 주 ${won(c.n*w)}`;r.lag=v>=need?"✓ 잘 따라가는 중":`${won(need-v)} 밀렸어요`;r.st=v>=total?"ok":over?"fail":"run"}
+  else if(c.k==="leave"){if(!S.settings.budget){r.txt="관리 탭에서 생활비 예산을 먼저 정해주세요";return r}
+    const allow=Math.floor(S.settings.budget*(1-c.n/100)),v=spendEntries().filter(x=>x.date>=c.start&&x.date<=upto).reduce((a,x)=>a+x.amt,0);
+    r.pct=v/allow;r.txt=`${won(v)} / ${won(allow)} 사용`;r.st=v>allow?"fail":over?"ok":"run"}
+  return r;
+}
+let chPastOpen=false,chJust=null;
+function renderChallenges(){
+  let changed=false;
+  S.challenges.forEach(c=>{if(c.result)return;const r=chEval(c);if(r.st!=="run"){c.result=r.st;c.doneAt=ymd(new Date());changed=true;if(r.st==="ok")chJust=c}});
+  if(changed){S.updatedAt=Date.now();clearTimeout(saveTimer);saveTimer=setTimeout(saveNow,300);if(chJust){toast("🏅 챌린지 성공! 배지를 받았어요");chJust=null}}
+  const act=S.challenges.filter(c=>!c.result),past=S.challenges.filter(c=>c.result).sort((a,b)=>(b.doneAt||"").localeCompare(a.doneAt||""));
+  $("#chList").innerHTML=act.length?act.map(c=>{const r=chEval(c);
+    const prog=r.seg&&r.seg<=14?`<div class="dots7">${Array.from({length:r.seg},(_,i)=>`<i class="${i<r.fill?"on":""}"></i>`).join("")}</div>`:`<div class="bar ${r.pct>1?"over":""}" style="margin:9px 0 6px;height:7px"><i style="width:${Math.min(100,r.pct*100)}%"></i></div>`;
+    const right=c.k==="w52"?`<span class="cbadge">${r.lag||""}</span>`:`<span class="cbadge">${r.dleft?`D-${r.dleft}`:"오늘까지"}</span>`;
+    return `<div class="ch tap" data-ch="${c.id}"><div class="row"><b>${esc(chTitle(c))}</b></div>${prog}<div class="row"><span class="muted" style="font-size:12.5px">${esc(r.txt)}</span>${right}</div></div>`}).join(""):`<div class="muted" style="padding:2px 4px 8px;line-height:1.5">‘카페 주 3번 이하’, ‘7일 무지출’처럼 작은 도전을 걸어보세요. 기록하면 앱이 알아서 체크해요.</div>`;
+  $("#chPast").innerHTML=past.length?`<div class="chPastT tap" id="chPastT">지난 챌린지 ${past.length}개 · 🏅 ${past.filter(c=>c.result==="ok").length} <span class="chv" style="${chPastOpen?"transform:rotate(180deg)":""}">▼</span></div>`+(chPastOpen?`<div class="card list" style="padding:4px 16px">`+past.map(c=>`<div class="item tap" data-ch="${c.id}"><div class="emo">${c.result==="ok"?"🏅":"🌱"}</div><div class="t"><b>${esc(chTitle(c))}</b><small>${c.start.slice(5).replace("-","/")} ~ ${chEval(c).end.slice(5).replace("-","/")} · ${c.result==="ok"?"성공":"아쉽게 실패"}</small></div></div>`).join("")+`</div>`:""):"";
+}
+$("#chPast").addEventListener("click",e=>{if(e.target.closest("#chPastT")){chPastOpen=!chPastOpen;renderChallenges()}});
+/* 챌린지 상세 (그만두기 · 기록 지우기) */
+let CV=null;
+document.addEventListener("click",e=>{const it=e.target.closest("[data-ch]");if(!it)return;const c=S.challenges.find(x=>x.id===it.dataset.ch);if(!c)return;CV=c.id;const r=chEval(c);
+  $("#cvTitle").textContent=chTitle(c);
+  $("#cvBody").innerHTML=`<div class="instInfo" style="margin:0 0 14px">${c.result?(c.result==="ok"?"🏅 성공한 챌린지예요!":"🌱 아쉽게 실패했어요. 다음엔 할 수 있어요!"):esc(r.txt)}<br><span style="font-weight:500">기간 ${c.start.replace(/-/g,".")} ~ ${r.end.replace(/-/g,".")}</span></div>`;
+  $("#cvDel").textContent=c.result?"기록에서 지우기":"챌린지 그만두기";$("#cvDel")._label=$("#cvDel").textContent;open("#sChView")});
+armDelete($("#cvDel"),"챌린지 그만두기",()=>{S.challenges=S.challenges.filter(c=>c.id!==CV);persist();close();toast("지웠어요")});
+/* 새 챌린지 */
+let CN={};
+function openChNew(){CN={k:"cnt"};chDefaults();drawChNew();open("#sChNew")}
+function chDefaults(){const T=chType(CN.k);CN.n=T.n||0;CN.days=T.dur||0;CN.cat=T.cat?(CN.cat&&S.cats.out.some(x=>x.id===CN.cat)?CN.cat:(S.cats.out.find(x=>/카페/.test(x.name))||S.cats.out[0]).id):null;
+  if(CN.k==="pause")CN.cat=(S.cats.out.find(x=>/쇼핑/.test(x.name))||S.cats.out[0]).id}
+function drawChNew(){
+  const T=chType(CN.k),groups=[...new Set(CHT.map(x=>x.g))];
+  $("#cnTypes").innerHTML=groups.map(gname=>`<div class="grpT">${gname}</div><div class="tgrid">`+CHT.filter(x=>x.g===gname).map(x=>`<button class="tp ${x.k===CN.k?"on":""}" data-k="${x.k}"><span class="e">${x.e}</span><b>${x.t}</b><small>${x.ex}</small></button>`).join("")+`</div>`).join("");
+  let cfg="";
+  if(T.cat)cfg+=`<div class="fl">카테고리</div><div class="chips" id="cnCat">${S.cats.out.map(c=>`<button class="chip ${c.id===CN.cat?"on":""}" data-c="${c.id}">${esc(c.emoji)} ${esc(c.name)}</button>`).join("")}</div>`;
+  if(T.n!==undefined)cfg+=`<div class="fl">${T.money?"금액":"목표"}</div><div class="row" style="gap:8px;justify-content:flex-start;margin-bottom:12px"><input class="f" id="cnN" inputmode="numeric" style="margin:0;width:150px" value="${T.money?CN.n.toLocaleString("ko-KR"):CN.n}"><span class="muted">${T.unit}</span></div>`;
+  if(T.dur)cfg+=`<div class="fl">기간</div><div class="chips" id="cnDur">${[7,14,30].map(d=>`<button class="chip ${CN.days===d?"on":""}" data-d="${d}">${durLabel(d)}</button>`).join("")}</div>`;
+  $("#cnCfg").innerHTML=cfg;
+  const p=periodOf(new Date(),0);
+  $("#cnPrev").textContent=chTitle({...CN,start:ymd(new Date()),days:CN.days||1})+(T.period?` (${fmtP(p)})`:"");
+  if($("#cnN"))$("#cnN").oninput=e=>{let v=num(e.target.value);if(T.money)e.target.value=v?v.toLocaleString("ko-KR"):"";CN.n=v;$("#cnPrev").textContent=chTitle({...CN,start:ymd(new Date()),days:CN.days||1})};
+}
+$("#cnTypes").onclick=e=>{const b=e.target.closest("[data-k]");if(!b)return;CN.k=b.dataset.k;chDefaults();drawChNew()};
+$("#cnCfg").onclick=e=>{const c=e.target.closest("[data-c]");if(c){CN.cat=c.dataset.c;drawChNew();return}const d=e.target.closest("[data-d]");if(d){CN.days=+d.dataset.d;drawChNew()}};
+$("#cnStart").onclick=()=>{
+  const T=chType(CN.k);if(T.n!==undefined&&!CN.n){toast("숫자를 넣어주세요");return}
+  if(CN.k==="leave"&&CN.n>=100){toast("100% 미만으로 정해주세요");return}
+  const today=ymd(new Date()),p=periodOf(new Date(),0);
+  const c={id:uid(),k:CN.k,cat:CN.cat||null,n:CN.n||0,start:today,days:CN.days||1};
+  if(T.period){c.start=p.s;c.days=dayDiff(p.s,p.e)+1}
+  if(CN.k==="log"||CN.k==="daily")c.days=CN.n;
+  if(CN.k==="w52")c.days=364;
+  S.challenges.push(c);persist();close();toast("챌린지 시작! 💪");
+};
+$("#chNew").onclick=openChNew;
+
 
 /* manage: settings inline */
 /* iOS 사파리는 숫자에 쉼표를 넣는 동안 change 이벤트를 놓칠 수 있어서, 입력하는 즉시 저장해요 */
@@ -1413,7 +1676,7 @@ $("#bkFile").onclick=async()=>{
   const btn=$("#bkFile");btn.disabled=true;btn.textContent="백업 파일 만드는 중…";
   try{
     const photos={};
-    for(const p of S.tx.flatMap(t=>t.photos||[]).concat(S.vision)){if(p.data)continue;if(idb){const b=await idbGet("photos",p.k);if(b)photos[p.k]=await b2d(b)}}
+    for(const p of S.tx.flatMap(t=>t.photos||[]).concat(S.vision,S.goals.filter(g=>g.photo).map(g=>g.photo))){if(p.data)continue;if(idb){const b=await idbGet("photos",p.k);if(b)photos[p.k]=await b2d(b)}}
     const json=JSON.stringify({app:"gagyebu",ver:3,savedAt:new Date().toISOString(),state:S,photos});
     const name=`가계부백업_${ymd(new Date())}.json`;
     const file=new File([json],name,{type:"application/json"});
@@ -1456,6 +1719,8 @@ $("#bkDo").onclick=async()=>{
     const vk=[];for(const v0 of (state.vision||[])){const v=Object.assign({},v0);const data=photos[v.k]||v.data;
       if(data){if(idb){await idbPut("photos",v.k,await d2b(data));delete v.data}else v.data=data;vk.push(v)}else lost++}
     state.vision=vk;
+    for(const g of (state.goals||[])){if(!g.photo)continue;const data=photos[g.photo.k]||g.photo.data;
+      if(data){if(idb){await idbPut("photos",g.photo.k,await d2b(data));g.photo={k:g.photo.k}}else g.photo={k:g.photo.k,data}}else{g.photo=null;lost++}}
     S=normalize(state);await saveNow();render();
     pendingImport=null;$("#bkConfirm").classList.add("hidden");
     toast(lost?`불러왔어요 (사진 ${lost}장은 옮기지 못했어요)`:"백업을 불러왔어요 ✓");
