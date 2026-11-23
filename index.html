@@ -232,6 +232,9 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 .pbar .fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,rgba(255,255,255,.7),#fff);box-shadow:0 0 12px rgba(255,255,255,.5);transition:width .5s}
 .pbar .tk{position:absolute;top:2px;bottom:2px;width:1.5px;background:rgba(255,255,255,.38);border-radius:2px}
 .pbar .dot{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);box-shadow:0 0 0 4px rgba(255,255,255,.3)}
+.gcard:not(.plain){min-height:176px;display:flex;flex-direction:column}
+.gcard:not(.plain) .in{flex:1;display:flex;flex-direction:column}
+.gcard:not(.plain) .pbar{margin-top:auto}
 .gcard.plain,.gvHead.plain{background:var(--card);color:var(--ink)}
 .gcard.plain::before,.gvHead.plain::before{display:none}
 .plain .nm,.plain .pc{text-shadow:none}.plain .pc{color:var(--accent)}
