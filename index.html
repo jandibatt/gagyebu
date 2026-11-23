@@ -218,6 +218,19 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 .memo .dd.soon{background:var(--accent-soft);color:var(--accent-ink)}
 .memo .dd.late{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}
 .memo .x{border:0;background:none;color:var(--sub);font-size:15px;cursor:pointer;padding:4px 2px;flex:none}
+/* category drill-down */
+.crow{padding:11px 0;border-top:1px solid var(--line);cursor:pointer}
+.crow:first-child{border-top:0}
+.crow .chv{font-size:11px;color:var(--sub);margin-left:6px;display:inline-block;transition:transform .2s}
+.crow.open .chv{transform:rotate(180deg)}
+.cdrill{background:var(--accent-soft);border-radius:16px;padding:8px 12px 4px;margin:10px -4px 2px;cursor:default}
+.cdrill .item{border-color:color-mix(in srgb,var(--accent) 14%,transparent);padding:9px 0}
+.cdrill .emo{background:var(--card);width:34px;height:34px}
+.csum{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 4px}
+.csum span{background:var(--card);border-radius:99px;padding:3px 10px;font-size:11.5px;font-weight:600;color:var(--accent-ink)}
+.mseg{display:flex;background:var(--chip);border-radius:10px;padding:2px;flex:none}
+.mseg button{border:0;background:none;padding:6px 10px;border-radius:8px;font-size:13px;font-weight:600;color:var(--sub);cursor:pointer;font-family:inherit}
+.mseg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
 /* manage */
 .mrow{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
 .mrow:last-child{border-bottom:0}
@@ -306,6 +319,7 @@ textarea.f{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
       <div class="mrow"><span class="k">월 실수령액</span><input id="mIncome" inputmode="numeric" placeholder="입력"><span class="muted">원</span></div>
       <div class="mrow"><span class="k">한 달 생활비 예산</span><input id="mBudget" inputmode="numeric" placeholder="입력"><span class="muted">원</span></div>
       <div class="mrow"><span class="k">앱 이름</span><input id="mName" placeholder="나의 가계부"></div>
+      <div class="mrow"><span class="k">카테고리 내역 정렬</span><div class="mseg" id="mCatSort"><button data-s="amt">금액 큰 순</button><button data-s="date">최신 날짜 순</button></div></div>
     </div>
     <div class="muted" id="mHint" style="margin:-4px 8px 0;line-height:1.5"></div>
 
@@ -818,12 +832,22 @@ function renderCal(today,tstr){
   mOut.forEach(x=>{const c=catOf(x.t),k=c.emoji+" "+c.name;cats[k]=(cats[k]||0)+x.amt});
   const ce=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
   $("#catCard").classList.toggle("hidden",!ce.length);
-  $("#catList").innerHTML=ce.map(([c,v])=>`<div style="margin:12px 0"><div class="row"><span>${esc(c)}</span><span class="amt">${won(v)} <span class="muted">${Math.round(v/tot*100)}%</span></span></div><div class="bar" style="margin:6px 0 0;height:6px"><i style="width:${v/ce[0][1]*100}%"></i></div></div>`).join("");
+  if(!cats[calCatOpen])calCatOpen="";
+  const bySort=S.settings.catSort==="date"?(a,b)=>b.date.localeCompare(a.date)||(b.t.at||0)-(a.t.at||0):(a,b)=>b.amt-a.amt||b.date.localeCompare(a.date);
+  $("#catList").innerHTML=ce.map(([c,v])=>{
+    const open=c===calCatOpen;let drill="";
+    if(open){const xs=mOut.filter(x=>{const cc=catOf(x.t);return cc.emoji+" "+cc.name===c}).sort(bySort),mx=Math.max(...xs.map(x=>x.amt));
+      drill=`<div class="cdrill"><div class="csum"><span>${xs.length}건</span><span>평균 ${won(Math.round(v/xs.length))}</span><span>최대 ${won(mx)}</span><span>${S.settings.catSort==="date"?"최신 날짜 순":"금액 큰 순"}</span></div><div class="list">`+
+        xs.map(x=>{const d=parse(x.date),ph=photoSrc((x.t.photos||[])[0]),cd=x.t.pay&&S.cards.find(k=>k.id===x.t.pay.card);
+          const sub=[`${d.getMonth()+1}/${d.getDate()} (${WD[d.getDay()]})`,x.n>1?`할부 ${x.i}/${x.n}`:"",cd?`💳 ${cd.name}`:""].filter(Boolean).join(" · ");
+          return `<div class="item tap" data-tx="${x.t.id}"><div class="emo" ${ph?`style="background-image:url('${ph}')"`:""}>${ph?"":esc(catOf(x.t).emoji)}</div><div class="t"><b>${esc(x.t.memo||catOf(x.t).name)}</b><small>${esc(sub)}</small></div><div class="amt">-${won(x.amt)}</div></div>`}).join("")+`</div></div>`}
+    return `<div class="crow ${open?"open":""}" data-ck="${esc(c)}"><div class="row"><span>${esc(c)}<span class="chv">▼</span></span><span class="amt">${won(v)} <span class="muted">${Math.round(v/tot*100)}%</span></span></div><div class="bar" style="margin:6px 0 0;height:6px"><i style="width:${v/ce[0][1]*100}%"></i></div>${drill}</div>`}).join("");
 }
 
 /* manage */
 let mType="out";
 function renderManage(p,fixedSum,today,rs,planned){
+  $$("#mCatSort button").forEach(b=>b.classList.toggle("on",b.dataset.s===(S.settings.catSort==="date"?"date":"amt")));
   const ae=document.activeElement;
   const setv=(id,v)=>{if(ae!==$(id))$(id).value=v};
   setv("#mPay",S.settings.payday);
@@ -866,6 +890,10 @@ function go(v){view=v;$$("nav button[data-v]").forEach(x=>x.classList.toggle("on
 $$("nav button[data-v]").forEach(b=>b.onclick=()=>go(b.dataset.v));
 document.addEventListener("click",e=>{const g=e.target.closest("[data-goto]");if(g){if(g.dataset.goto==="goals"&&!S.goals.length){go("goals");openGoal()}else go(g.dataset.goto)}});
 $("#goCal").onclick=()=>go("cal");
+let calCatOpen="";
+$("#catList").addEventListener("click",e=>{if(e.target.closest(".cdrill"))return;const r=e.target.closest("[data-ck]");if(!r)return;calCatOpen=calCatOpen===r.dataset.ck?"":r.dataset.ck;render();
+  if(calCatOpen)requestAnimationFrame(()=>{const o=document.querySelector(".crow.open");if(o)o.scrollIntoView({block:"nearest",behavior:"smooth"})})});
+$("#mCatSort").onclick=e=>{const b=e.target.closest("[data-s]");if(!b)return;S.settings.catSort=b.dataset.s;persist();toast(b.dataset.s==="date"?"최신 날짜 순으로 보여줄게요":"금액 큰 순으로 보여줄게요")};
 $("#calPrev").onclick=()=>{calM--;if(calM<0){calM=11;calY--}render()};
 $("#calNext").onclick=()=>{calM++;if(calM>11){calM=0;calY++}render()};
 
@@ -880,6 +908,7 @@ $("#bg").onclick=close;
     const s=e.target.closest(".sheet.open");
     if(!s||e.touches.length>1){sh=null;return}
     const y=e.touches[0].clientY,top=s.getBoundingClientRect().top;
+    if(s.id==="sAdd"&&y-top>48){sh=null;return}   // 기록 창은 손잡이에서만 닫혀요
     if(y-top>64&&s.scrollTop>0){sh=null;return}
     sh=s;y0=y;dy=0;t0=Date.now();drag=false;
   },{passive:true});
